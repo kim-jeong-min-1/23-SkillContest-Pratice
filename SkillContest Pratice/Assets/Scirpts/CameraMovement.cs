@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] Transform target;
+    [SerializeField] private Transform target;
     [SerializeField] private float moveSpeed;
 
-    private Vector3 offset = new Vector3(0, 11f, -18f);
-    // Update is called once per frame 
+    private Vector3 offset = new Vector3(0, 11f, -15f);
+
     void FixedUpdate()
     {
         Vector3 sumPosition = target.position + offset;

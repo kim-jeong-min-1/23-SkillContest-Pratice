@@ -25,10 +25,9 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         moveInput = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
-
-        PlayerRotation(moveInput);
-        
         var moveDir = transform.forward + moveInput;
+    
+        PlayerRotation(moveInput);
         transform.Translate(moveDir * moveSpeed * Time.deltaTime);
     }
 
