@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotateSpeed;
     [SerializeField] private float returnRotateSpeed;
-    [SerializeField] private GameObject model;
+    [SerializeField] private GameObject model; 
 
     private Vector3 moveInput;
     private float rotateX = 0;

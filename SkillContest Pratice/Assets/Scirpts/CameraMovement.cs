@@ -7,7 +7,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private Transform target;
     [SerializeField] private float moveSpeed;
 
-    private Vector3 offset = new Vector3(0, 11f, -15f);
+    private Vector3 offset = new Vector3(0, 8f, -12.5f);
 
     void FixedUpdate()
     {
