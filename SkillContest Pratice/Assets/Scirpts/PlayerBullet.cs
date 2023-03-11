@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class PlayerBullet : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private float bulletSpeed;
+    private Rigidbody rb;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake() => rb = GetComponent<Rigidbody>();
+    private void Start()
     {
-        
+        rb.velocity = transform.up * bulletSpeed;
     }
 }
