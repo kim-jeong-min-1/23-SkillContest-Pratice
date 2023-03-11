@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
+//using System.Collections.Generic;
+//using Unity.VisualScripting;
+//using UnityEditor.Rendering;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -21,11 +21,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float returnRotateSpeed;
     [SerializeField] private float boosterSpeed;
 
-    [Space(10)]
+    [Space(15)]
     [SerializeField] private GameObject model;
-    [SerializeField] private PlayerBullet bullet;
     [SerializeField] private Transform[] firePos;
+    [SerializeField] private PlayerBullet playerBullet;
+    [SerializeField] private CrossHair crossHair;
 
+    [Space(15)]
     [SerializeField] private TrailRenderer[] boosterEffect;
     [SerializeField] private GameObject[] airEffect;
 
@@ -46,18 +48,15 @@ public class PlayerController : MonoBehaviour
             if(isbooster != value)
             {
                 isbooster = value;
-                StartCoroutine(boosterEffectOnOff(isbooster, 1f));
+                StartCoroutine(boosterOnOff(isbooster, 1f));
             }           
         } 
     }
 
     void FixedUpdate()
     {
-        moveInput = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
-        var moveDir = transform.forward + moveInput;
-
+        PlayerMovement();
         PlayerRotation(moveInput);
-        transform.Translate(moveDir * moveSpeed * Time.deltaTime);
     }
     private void Update()
     {
@@ -65,6 +64,13 @@ public class PlayerController : MonoBehaviour
         PlayerBooster();
     }
 
+    private void PlayerMovement()
+    {
+        moveInput = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
+        var moveDir = transform.forward + moveInput;
+        
+        transform.Translate(moveDir * moveSpeed * Time.deltaTime);
+    }
     private void PlayerRotation(Vector3 moveInput)
     {
         if (moveInput != Vector3.zero)
@@ -83,12 +89,25 @@ public class PlayerController : MonoBehaviour
     private void PlayerShot()
     {
         curTime += Time.deltaTime;
+
         if (curTime >= tempTime && Input.GetKey(KeyCode.Z))
         {
             tempTime = curTime + playerShotDelayTime;
             shotPointIndex = (shotPointIndex == 0) ? 1 : 0;
 
-            Instantiate(bullet, firePos[shotPointIndex].position, bullet.transform.rotation);
+            Quaternion dir;
+
+            if(crossHair.target != null)
+            {
+                var vec = (crossHair.target.position - firePos[shotPointIndex].position).normalized;
+                dir = Quaternion.LookRotation(vec);
+            }
+            else
+            {
+                dir = Quaternion.Euler(crossHair.crossHairDir);
+            }
+            
+            Instantiate(playerBullet, firePos[shotPointIndex].position, dir);
         }
     }
     private void PlayerBooster()
@@ -98,16 +117,17 @@ public class PlayerController : MonoBehaviour
             isBooster = !isBooster;
         }
     }
-    private IEnumerator boosterEffectOnOff(bool isBooster, float time)
+    private IEnumerator boosterOnOff(bool isBooster, float time)
     {
-        var value = (isBooster) ? 1 : 0;
-        var speedMulValue = (isBooster) ? 1 : -1;
-
         for (int i = 0; i < airEffect.Length; i++) airEffect [i].SetActive(isBooster);
+
+        var speedMulValue = (isBooster) ? 1 : -1;
         moveSpeed = speedMulValue * boosterSpeed + moveSpeed;
 
         float current = 0;
         float percent = 0;
+        var value = (isBooster) ? 1 : 0;
+
         while (percent < 1)
         {
             current += Time.deltaTime;
