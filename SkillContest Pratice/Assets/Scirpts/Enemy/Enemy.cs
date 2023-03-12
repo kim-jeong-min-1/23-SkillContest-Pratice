@@ -15,10 +15,10 @@ public abstract class Enemy : MonoBehaviour
             else enemyHp = value;
         }
     }
+    protected abstract IEnumerator EnemyAI_Update();
 
     public void GetDamage(float damage)
     {
         Hp -= damage;
     }
-    protected abstract IEnumerator EnemyAI_Update();
 }

@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
             if(crossHair.target != null)
             {
                 var vec = (crossHair.target.position - firePos[shotPointIndex].position).normalized;
-                dir = Quaternion.LookRotation(vec);
+                dir = Quaternion.LookRotation(vec, Vector3.one);
             }
             else
             {
