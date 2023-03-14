@@ -14198,6 +14198,10 @@ PrefabInstance:
       propertyPath: crossHair
       value: 
       objectReference: {fileID: 1644471928}
+    - target: {fileID: 6756621809362912570, guid: 14c201fc959a70c45bf3c311658c4ca8, type: 3}
+      propertyPath: playerBullet
+      value: 
+      objectReference: {fileID: 395201068316689514, guid: 686c9f02c96fb1d40a7df33553e4513c, type: 3}
     - target: {fileID: 6756621809362912571, guid: 14c201fc959a70c45bf3c311658c4ca8, type: 3}
       propertyPath: m_RootOrder
       value: 4
