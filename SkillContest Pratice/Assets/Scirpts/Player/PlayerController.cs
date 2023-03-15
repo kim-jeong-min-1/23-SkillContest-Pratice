@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject model;
     [SerializeField] private Transform[] firePos;
     [SerializeField] private PlayerBullet playerBullet;
+    [SerializeField] private PlayerMissile playerMissile;
     [SerializeField] private CrossHair crossHair;
 
     [Space(15)]
@@ -61,6 +62,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         PlayerShot();
+        PlayerMissile();
         PlayerBooster();
     }
 
@@ -108,6 +110,23 @@ public class PlayerController : MonoBehaviour
             }
             
             Instantiate(playerBullet, firePos[shotPointIndex].position, dir);
+        }
+    }
+    private void PlayerMissile()
+    {
+        if (Input.GetKeyDown(KeyCode.A) && crossHair.target != null)
+        {
+            int pos = 6;
+            for (int i = 0; i < 6; i++)
+            {
+                var missile = Instantiate
+                    (playerMissile, 
+                    new Vector3(pos + transform.position.x, transform.position.y, transform.position.z), 
+                    Quaternion.Euler(-90, i * 30, i * 30));
+                missile.target = crossHair.target;
+
+                pos -= 2;
+            }            
         }
     }
     private void PlayerBooster()
