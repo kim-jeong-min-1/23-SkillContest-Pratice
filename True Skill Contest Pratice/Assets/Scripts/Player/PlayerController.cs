@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private BulletShooter shooter;
 
+    private float curTime = 0f;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -18,6 +20,11 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         PlayerMovement(playerInput.moveInput.normalized);
+        
+    }
+
+    private void Update()
+    {
         PlayerShot();
     }
 
@@ -31,6 +38,12 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerShot()
     {
-        shooter.fire();
+        curTime += Time.deltaTime;
+
+        if (playerInput.playerShot && curTime >= shooter.cool)
+        {
+            curTime = 0f;
+            shooter.fire();
+        }
     }
 }

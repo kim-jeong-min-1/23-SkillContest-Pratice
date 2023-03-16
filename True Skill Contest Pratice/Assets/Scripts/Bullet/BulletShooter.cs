@@ -6,9 +6,10 @@ public class BulletShooter : MonoBehaviour
 {
     [SerializeField] private EntityType type;
     [SerializeField] private Bullet bulletObj;
+
     [SerializeField] private float speed;
     [SerializeField] private float damage;
-    [SerializeField] private float cool;
+    [SerializeField] public float cool;
 
     public BulletShooter(float damage, float speed, float cool, EntityType type)
     {
@@ -18,14 +19,16 @@ public class BulletShooter : MonoBehaviour
         this.type = type;   
     }
 
-    public void fire(Quaternion rotation)
+    public void fire(Vector3 Pos = default, Quaternion Rot = default)
     {
-        Bullet bullet = Instantiate(bulletObj, transform.position, Quaternion.identity);
+        Pos = (Pos == default(Vector3)) ? transform.position : Pos;
+        Rot = (Rot == default(Quaternion)) ? transform.rotation : Rot;
 
-        bullet.SetBullet(speed, damage, rotation, )
+        Bullet bullet = Instantiate(bulletObj, Pos, Quaternion.identity);
+        bullet.SetBullet(speed, damage, Rot, type);
     }
-    
 }
+
 public enum EntityType
 {
     player,

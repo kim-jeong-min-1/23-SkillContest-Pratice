@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Utils : Singleton<Utils>
 {
-    public static readonly Vector2 limit = new Vector2(65f, 15f);
+    public static readonly Vector2 limit = new Vector2(55f, 30f);
 
     private void Awake()
     {
