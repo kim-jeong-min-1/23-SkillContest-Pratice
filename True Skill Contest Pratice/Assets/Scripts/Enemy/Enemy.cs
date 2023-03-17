@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,9 +8,10 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected float enemyHp;
     [SerializeField] protected float enemySpeed;
     [SerializeField] protected float exp;
-    [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private Image enemyHpImage;
+    [SerializeField] private SpriteRenderer sprite;
 
+    private float maxEnemyHp;
     protected EnemyStat enemyStat;
     protected BulletShooter shooter;
     protected Transform player;
@@ -21,6 +23,7 @@ public abstract class Enemy : MonoBehaviour
         shooter = GetComponent<BulletShooter>();     
 
         this.enemyHp = enemyStat.hp;
+        this.maxEnemyHp = enemyStat.hp;
         this.enemySpeed = enemyStat.speed;
         this.exp = enemyStat.exp;
     }
@@ -32,7 +35,6 @@ public abstract class Enemy : MonoBehaviour
     {
         transform.Translate(-transform.forward * enemySpeed * Time.deltaTime);
     }
-
     protected IEnumerator MoveToPlayerPosition(float nX, float nZ, float time)
     {
         Vector3 Pos = player.position;
@@ -40,28 +42,30 @@ public abstract class Enemy : MonoBehaviour
 
         float current = 0;
         float percent = 0;
+        Vector3 startPos = transform.position;
 
         while (percent < 1)
         {
             current += Time.deltaTime;
             percent = current / time;
 
-            transform.position = Vector3.Lerp(transform.position, Pos, percent);
-            yield return null;
+            transform.position = Vector3.Lerp(startPos, Pos, percent);
+            yield return new WaitForEndOfFrame();
         }
     }
     protected IEnumerator MoveTo(Vector3 targetPos, float time)
     {
         float current = 0;
         float percent = 0;
+        Vector3 startPos = transform.position;
 
         while (percent < 1)
         {
             current += Time.deltaTime;
             percent = current / time;
 
-            transform.position = Vector3.Lerp(transform.position, targetPos, percent);
-            yield return null;
+            transform.position = Vector3.Lerp(startPos, targetPos, percent);
+            yield return new WaitForEndOfFrame();
         }
     }
     protected IEnumerator DefaultEnemyShooter()
@@ -72,7 +76,35 @@ public abstract class Enemy : MonoBehaviour
             yield return new WaitForSeconds(shooter.cool);
         }
     }
+    protected Bullet InstantiateBullet(Quaternion rot = default, Vector3 pos = default)
+    {
+        if(rot != default)
+        {
+            shooter.fire(rot);
+        }
+        else if(pos != default)
+        {
+            shooter.fire(pos, rot);
+        }
+        else
+        {
+            shooter.fire();
+        }
+        return shooter.curFireBullet;
+    }
+    private IEnumerator HitEffect()
+    {
+        Color tempColor = sprite.color;
 
+        Color color = tempColor;
+        color.a = 160f / 255;
+
+        sprite.color = color;
+        yield return new WaitForSeconds(0.1f);
+
+        sprite.color = tempColor;
+        yield break;
+    }
     private void GetDamage(float damage)
     {
         if(enemyHp - damage <= 0)
@@ -80,10 +112,10 @@ public abstract class Enemy : MonoBehaviour
             Die(); return;
         }
 
-        var lerp = Mathf.Lerp(0f, enemyHp, enemyHp - damage);
-        enemyHpImage.fillAmount = lerp;
+        enemyHp -= damage; 
+        enemyHpImage.fillAmount = enemyHp / maxEnemyHp;
+        StartCoroutine(HitEffect());
     }
-
     private void Die()
     {
         Destroy(gameObject);
@@ -108,7 +140,7 @@ public class EnemyStat
     public EnemyStat()
     {
         hp = 100f;
-        speed = 10f;
+        speed = 20f;
         exp = 15f;
     }
 }

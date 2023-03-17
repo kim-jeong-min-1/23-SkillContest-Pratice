@@ -14,7 +14,6 @@ public class CameraMovment : MonoBehaviour
         if(!target) target = FindObjectOfType<PlayerController>().transform;
     }
 
-    
     void FixedUpdate()
     {
         Vector3 targetPosition = target.position + offset;

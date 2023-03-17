@@ -1,20 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     [SerializeField] private float moveSpeed;
+    [SerializeField] private Image hpBar;
+    [SerializeField] private Image fuelBar;
 
     private PlayerInput playerInput;
     private BulletShooter shooter;
+
+    private float playerMaxHp;
+    [SerializeField] private float playerHp;
+
+    private float playerMaxFuel;
+    [SerializeField] private float playerFuel;
+
+    public float Hp
+    {
+        get => playerHp;
+        set
+        {
+            playerHp = value;
+
+            if (playerHp <= 0) return;
+            hpBar.fillAmount = playerHp / playerMaxHp;
+        }
+    }
+
+    public float Fuel
+    {
+        get => playerFuel;
+        set
+        {
+            playerFuel = value;
+            fuelBar.fillAmount = playerFuel / playerMaxFuel;
+        }
+    }
 
     private float curTime = 0f;
 
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
-        shooter = GetComponent<BulletShooter>();    
+        shooter = GetComponent<BulletShooter>();
+
+        SetInstance();
+        playerMaxHp = playerHp;
+        playerMaxFuel = playerFuel;
     }
 
     private void FixedUpdate()
@@ -22,7 +57,6 @@ public class PlayerController : MonoBehaviour
         PlayerMovement(playerInput.moveInput.normalized);
         
     }
-
     private void Update()
     {
         PlayerShot();
@@ -30,12 +64,14 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerMovement(Vector3 moveInput)
     {
-        transform.Translate(moveInput * moveSpeed * Time.deltaTime);
+        Vector3 targetPos = transform.position + moveInput * moveSpeed;
+        Vector3 movePos = Vector3.Lerp(transform.position, targetPos, Time.deltaTime);
+        
+        movePos = new Vector3(Mathf.Clamp(movePos.x, -Utils.limit.x, Utils.limit.x), movePos.y,
+            Mathf.Clamp(movePos.z, -Utils.limit.y, Utils.limit.y));
 
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -Utils.limit.x, Utils.limit.x), transform.position.y,
-            Mathf.Clamp(transform.position.z, -Utils.limit.y, Utils.limit.y));
+        transform.position = movePos;
     }
-
     private void PlayerShot()
     {
         curTime += Time.deltaTime;
@@ -44,6 +80,14 @@ public class PlayerController : MonoBehaviour
         {
             curTime = 0f;
             shooter.fire();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EnemyBullet"))
+        {
+            Hp -= other.GetComponent<Bullet>().damage;
         }
     }
 }
