@@ -44,10 +44,4 @@ public class Bullet : MonoBehaviour
     {
         BulletMovement();
     }
-
-
-    public void GetDamage()
-    {
-
-    }
 }

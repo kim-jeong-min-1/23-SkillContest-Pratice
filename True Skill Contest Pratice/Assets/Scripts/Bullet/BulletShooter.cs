@@ -19,14 +19,21 @@ public class BulletShooter : MonoBehaviour
         this.type = type;   
     }
 
-    public void fire(Vector3 Pos = default, Quaternion Rot = default)
+    public void fire()
     {
-        Pos = (Pos == default(Vector3)) ? transform.position : Pos;
-        Rot = (Rot == default(Quaternion)) ? transform.rotation : Rot;
-
-        Bullet bullet = Instantiate(bulletObj, Pos, Quaternion.identity);
-        bullet.SetBullet(speed, damage, Rot, type);
+        Bullet bullet = Instantiate(bulletObj, transform.position, Quaternion.identity);
+        bullet.SetBullet(speed, damage, transform.rotation, type);
     }
+    public void fire(Quaternion rot)
+    {
+        Bullet bullet = Instantiate(bulletObj, transform.position, Quaternion.identity);
+        bullet.SetBullet(speed, damage, rot, type);
+    }
+    public void fire(Vector3 pos, Quaternion rot)
+    {
+        Bullet bullet = Instantiate(bulletObj, pos, Quaternion.identity);
+        bullet.SetBullet(speed, damage, rot, type);
+    }               
 }
 
 public enum EntityType
