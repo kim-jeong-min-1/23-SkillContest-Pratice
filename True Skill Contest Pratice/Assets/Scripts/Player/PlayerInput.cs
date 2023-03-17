@@ -14,6 +14,6 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         moveInput = 
-            new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+            new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
     }
 }

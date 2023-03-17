@@ -54,7 +54,7 @@ public class PlayerController : Singleton<PlayerController>
 
     private void FixedUpdate()
     {
-        PlayerMovement(playerInput.moveInput.normalized);
+        PlayerMovement();
         
     }
     private void Update()
@@ -62,15 +62,12 @@ public class PlayerController : Singleton<PlayerController>
         PlayerShot();
     }
 
-    private void PlayerMovement(Vector3 moveInput)
+    private void PlayerMovement()
     {
-        Vector3 targetPos = transform.position + moveInput * moveSpeed;
-        Vector3 movePos = Vector3.Lerp(transform.position, targetPos, Time.deltaTime);
-        
-        movePos = new Vector3(Mathf.Clamp(movePos.x, -Utils.limit.x, Utils.limit.x), movePos.y,
-            Mathf.Clamp(movePos.z, -Utils.limit.y, Utils.limit.y));
+        transform.position += playerInput.moveInput * moveSpeed * Time.deltaTime;
 
-        transform.position = movePos;
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -Utils.limit.x, Utils.limit.x), transform.position.y,
+            Mathf.Clamp(transform.position.z, -Utils.limit.y, Utils.limit.y));
     }
     private void PlayerShot()
     {
