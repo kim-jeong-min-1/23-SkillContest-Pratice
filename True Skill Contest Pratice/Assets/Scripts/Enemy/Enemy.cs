@@ -7,7 +7,8 @@ public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] protected float enemyHp;
     [SerializeField] protected float enemySpeed;
-    [SerializeField] protected float exp;
+    [SerializeField] private float exp;
+    [SerializeField] private float score;
     [SerializeField] private Image enemyHpImage;
     [SerializeField] private SpriteRenderer sprite;
 
@@ -16,8 +17,12 @@ public abstract class Enemy : MonoBehaviour
     protected BulletShooter shooter;
     protected Transform player;
 
+    public bool isDie { get; private set; }
+
     protected virtual void SetEnemy()
     {
+        EnemyStat n = new EnemyStat();
+        JsonLoader.Save(n, "Enemy_Stat");
         enemyStat = JsonLoader.Load<EnemyStat>("Enemy_Stat");
         player = FindObjectOfType<PlayerController>().transform;
         shooter = GetComponent<BulletShooter>();     
@@ -26,6 +31,7 @@ public abstract class Enemy : MonoBehaviour
         this.maxEnemyHp = enemyStat.hp;
         this.enemySpeed = enemyStat.speed;
         this.exp = enemyStat.exp;
+        this.score = enemyStat.score;
     }
 
     protected virtual void Awake() => SetEnemy();
@@ -68,23 +74,11 @@ public abstract class Enemy : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
-    protected IEnumerator DefaultEnemyShooter()
-    {
-        while (gameObject)
-        {
-            shooter.fire(Quaternion.Euler(0, 180f, 0));
-            yield return new WaitForSeconds(shooter.cool);
-        }
-    }
-    protected Bullet InstantiateBullet(Quaternion rot = default, Vector3 pos = default)
+    protected Bullet InstantiateBullet(Quaternion rot = default)
     {
         if(rot != default)
         {
             shooter.fire(rot);
-        }
-        else if(pos != default)
-        {
-            shooter.fire(pos, rot);
         }
         else
         {
@@ -109,24 +103,21 @@ public abstract class Enemy : MonoBehaviour
     {
         if(enemyHp - damage <= 0)
         {
-            Die(); return;
+            isDie = true;
         }
-
         enemyHp -= damage; 
         enemyHpImage.fillAmount = enemyHp / maxEnemyHp;
         StartCoroutine(HitEffect());
-    }
-    private void Die()
-    {
-        Destroy(gameObject);
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("PlayerBullet"))
         {
-            GetDamage(other.GetComponent<Bullet>().damage);
-            Destroy(other.gameObject);
+            var bullet = other.GetComponent<Bullet>();
+
+            bullet.isHit = true;
+            GetDamage(bullet.damage);
         }
     }
 }
@@ -136,12 +127,14 @@ public class EnemyStat
     public float hp;
     public float speed;
     public float exp;
+    public float score;
 
     public EnemyStat()
     {
         hp = 100f;
-        speed = 20f;
-        exp = 15f;
+        speed = 30f;
+        exp = 30f;
+        score = 50;
     }
 }
 

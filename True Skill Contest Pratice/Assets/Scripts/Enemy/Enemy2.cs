@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy2 : Enemy
 {
     int repeatCount = 0;
+    Color spriteColor = Color.red;
 
     protected override void Awake()
     {
@@ -53,6 +54,7 @@ public class Enemy2 : Enemy
             {
                 var bullet = InstantiateBullet(Quaternion.Euler(0, j, 0));
                 bullet.speed = 90;
+                bullet.SetSpriteColor(spriteColor);
             }
             yield return new WaitForSeconds(0.1f);
         }
@@ -74,6 +76,7 @@ public class Enemy2 : Enemy
 
                 var bullet = InstantiateBullet(Quaternion.Euler(new Vector3(0, n3, 0)));
                 bullet.speed = 40;
+                bullet.SetSpriteColor(spriteColor);
             }
             yield return new WaitForSeconds(0.1f);
         }

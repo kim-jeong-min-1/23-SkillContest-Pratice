@@ -6,20 +6,23 @@ public class Bullet : MonoBehaviour
 {
     public float speed { get; set; }
     public float damage { get; set; }
+    public bool isHit { get; set; }
 
-    public virtual void SetBullet(float speed, float damage, Quaternion rotation, EntityType type)
+    public virtual void SetBullet(float speed, float damage, Quaternion rot, EntityType type)
     {
         this.speed = speed;
         this.damage = damage; 
-        this.transform.rotation = rotation;
+        this.transform.rotation = rot;
+        this.isHit = false;
         SetTag(type);
     }
 
-    public virtual void SetBullet(float speed, float damage, Quaternion rotation)
+    public virtual void SetBullet(float speed, float damage, Quaternion rot)
     {
         this.speed = speed;
         this.damage = damage;
-        this.transform.rotation = rotation;
+        this.transform.rotation = rot;
+        this.isHit = false;
     }
 
 
@@ -35,13 +38,14 @@ public class Bullet : MonoBehaviour
         }
     }
 
+    public void SetSpriteColor(Color color)
+    {
+        var sprite = gameObject.transform.Find("sprite").GetComponent<SpriteRenderer>();
+        sprite.color = color;
+    }
+
     public virtual void BulletMovement()
     {
         transform.Translate(new Vector3(0, 0, speed * Time.deltaTime));
-    }
-
-    private void Update()
-    {
-        BulletMovement();
     }
 }

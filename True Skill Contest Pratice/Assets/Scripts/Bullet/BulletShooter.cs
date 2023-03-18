@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class BulletShooter : MonoBehaviour
 {
     [SerializeField] private EntityType type;
-    [SerializeField] private Bullet bulletObj;
-
     [SerializeField] private float speed;
     [SerializeField] private float damage;
     [SerializeField] public float cool;
@@ -22,22 +21,28 @@ public class BulletShooter : MonoBehaviour
 
     public void fire()
     {
-        Bullet bullet = Instantiate(bulletObj, transform.position, Quaternion.identity);
+        Bullet bullet;
+        if (type == EntityType.player) bullet = BulletPool.Instance.GetPlayerBullet();
+        else bullet = BulletPool.Instance.GetEnemyBullet();
+
+        bullet.transform.position = transform.position;
         bullet.SetBullet(speed, damage, transform.rotation, type);
+    
         curFireBullet = bullet;
+        BulletSubject.Instance.AddBullet(bullet);
     }
     public void fire(Quaternion rot)
     {
-        Bullet bullet = Instantiate(bulletObj, transform.position, Quaternion.identity);
+        Bullet bullet;
+        if (type == EntityType.player) bullet = BulletPool.Instance.GetPlayerBullet();
+        else bullet = BulletPool.Instance.GetEnemyBullet();
+
+        bullet.transform.position = transform.position;
         bullet.SetBullet(speed, damage, rot, type);
+
         curFireBullet = bullet;
-    }
-    public void fire(Vector3 pos, Quaternion rot)
-    {
-        Bullet bullet = Instantiate(bulletObj, pos, Quaternion.identity);
-        bullet.SetBullet(speed, damage, rot, type);
-        curFireBullet = bullet;
-    }               
+        BulletSubject.Instance.AddBullet(bullet);
+    }              
 }
 
 public enum EntityType
