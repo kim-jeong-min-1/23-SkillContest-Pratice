@@ -7,8 +7,9 @@ public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] protected float enemyHp;
     [SerializeField] protected float enemySpeed;
-    [SerializeField] private float exp;
     [SerializeField] private float score;
+    [SerializeField] private string enemyName;
+
     [SerializeField] private Image enemyHpImage;
     [SerializeField] private SpriteRenderer sprite;
 
@@ -21,8 +22,6 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void SetEnemy()
     {
-        EnemyStat n = new EnemyStat();
-        JsonLoader.Save(n, "Enemy_Stat");
         enemyStat = JsonLoader.Load<EnemyStat>("Enemy_Stat");
         player = FindObjectOfType<PlayerController>().transform;
         shooter = GetComponent<BulletShooter>();     
@@ -30,7 +29,6 @@ public abstract class Enemy : MonoBehaviour
         this.enemyHp = enemyStat.hp;
         this.maxEnemyHp = enemyStat.hp;
         this.enemySpeed = enemyStat.speed;
-        this.exp = enemyStat.exp;
         this.score = enemyStat.score;
     }
 
@@ -89,15 +87,12 @@ public abstract class Enemy : MonoBehaviour
     private IEnumerator HitEffect()
     {
         Color tempColor = sprite.color;
-
-        Color color = tempColor;
-        color.a = 160f / 255;
-
-        sprite.color = color;
-        yield return new WaitForSeconds(0.1f);
-
+        tempColor.a = 160f / 255;
         sprite.color = tempColor;
-        yield break;
+        yield return new WaitForSeconds(0.08f);
+
+        tempColor.a = 1;
+        sprite.color = tempColor;
     }
     private void GetDamage(float damage)
     {
@@ -109,7 +104,6 @@ public abstract class Enemy : MonoBehaviour
         enemyHpImage.fillAmount = enemyHp / maxEnemyHp;
         StartCoroutine(HitEffect());
     }
-
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("PlayerBullet"))
@@ -126,14 +120,12 @@ public class EnemyStat
 {
     public float hp;
     public float speed;
-    public float exp;
     public float score;
 
     public EnemyStat()
     {
         hp = 100f;
         speed = 30f;
-        exp = 30f;
         score = 50;
     }
 }

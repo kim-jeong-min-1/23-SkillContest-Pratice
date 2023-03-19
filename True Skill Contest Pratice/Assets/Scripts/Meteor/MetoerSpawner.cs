@@ -16,7 +16,7 @@ public class MetoerSpawner : MonoBehaviour
 
     private IEnumerator Enemy_Spawner()
     {
-        while (true)
+        while (!GameManager.Instance.qusetComplete)
         {
             Vector3 spawnPos = new Vector3(Random.Range(-Utils.spawnLimit.x, Utils.spawnLimit.x), 0f, Utils.spawnLimit.y);
             Meteor meteor = Instantiate(metoer, spawnPos, Quaternion.identity, meteorGroup);

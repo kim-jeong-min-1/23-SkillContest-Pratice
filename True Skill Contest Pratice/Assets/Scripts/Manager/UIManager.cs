@@ -1,14 +1,28 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : Singleton<UIManager>
 {
     [SerializeField] private Image playerHitUI;
+    [SerializeField] private TextMeshProUGUI qusetUI;
 
-    private void Awake()
+    private void Awake() => SetInstance();
+
+    private void Start()
     {
-        SetInstance();
+        SetUI();
+    }
+
+    private void SetUI()
+    {
+        
+    }
+
+    public void QusetUIUpdate(string text)
+    {
+        qusetUI.text = text;
     }
 
     public void PlayerHitUIEffect(float time)

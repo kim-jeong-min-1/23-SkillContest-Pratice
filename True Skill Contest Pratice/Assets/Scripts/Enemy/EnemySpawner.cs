@@ -16,7 +16,7 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator Enemy_Spawner()
     {        
-        while (true)
+        while (!GameManager.Instance.qusetComplete)
         {
             int randEnemy = Random.Range(0, enemies.Count);         
 

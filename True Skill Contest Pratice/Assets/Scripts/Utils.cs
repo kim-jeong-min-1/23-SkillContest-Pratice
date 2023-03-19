@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Utils : Singleton<Utils>
+public class Utils
 {
     public static readonly Vector2 moveLimit = new Vector2(55f, 30f);
     public static readonly Vector2 spawnLimit = new Vector2(55f, 80f);
@@ -14,10 +14,5 @@ public class Utils : Singleton<Utils>
             return true;
         }
         return false;   
-    }
-
-    private void Awake()
-    {
-        SetInstance();
     }
 }

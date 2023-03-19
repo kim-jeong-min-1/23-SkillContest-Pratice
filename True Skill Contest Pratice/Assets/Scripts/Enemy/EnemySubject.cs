@@ -8,7 +8,7 @@ public class EnemySubject : Singleton<EnemySubject>
     private List<Enemy> curEnemies;
     private List<Enemy> dieEnemies;
 
-    public int enemyCount { get; private set; }
+    public int enemyCount { get; set; }
 
     private void Awake()
     {
@@ -39,11 +39,13 @@ public class EnemySubject : Singleton<EnemySubject>
             }
         }
     }
+
     private void EnemyDie()
     {
         foreach (var enemy in dieEnemies)
         {
-            if(enemy.isDie) EnemyDieEffect(enemy.transform.position);
+            if (enemy.isDie) EnemyDieEffect(enemy.transform.position);
+
             Destroy(enemy.gameObject);
             curEnemies.Remove(enemy);
         }
@@ -54,7 +56,7 @@ public class EnemySubject : Singleton<EnemySubject>
     {
         curEnemies.Add(enemy);
         enemyCount++;
-    }   
+    }
 
     private void EnemyDieEffect(Vector3 pos)
     {
@@ -71,7 +73,7 @@ public class EnemySubject : Singleton<EnemySubject>
             if (enemy == null) continue;
 
             var dis = Vector3.Distance(target, enemy.transform.position);
-            if(dis < nearDis)
+            if (dis < nearDis)
             {
                 nearDis = dis;
                 nearEnemy = enemy.transform;

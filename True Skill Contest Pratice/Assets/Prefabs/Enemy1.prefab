@@ -81,6 +81,8 @@ MonoBehaviour:
   enemyHp: 0
   enemySpeed: 0
   exp: 0
+  score: 0
+  enemyName: Enemy1
   enemyHpImage: {fileID: 7244314371030949197}
   sprite: {fileID: 7244314371237529263}
 --- !u!114 &7244314369778777257

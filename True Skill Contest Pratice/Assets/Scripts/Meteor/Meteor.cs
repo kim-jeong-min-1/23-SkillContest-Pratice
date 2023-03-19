@@ -10,7 +10,6 @@ public class Meteor : MonoBehaviour
     private float metoerMaxHp;
     private float hp;
     private float speed;
-    private float exp;
     private float score;
     private int rotateDir;
 
@@ -30,13 +29,10 @@ public class Meteor : MonoBehaviour
 
     public void Awake()
     {
-        MeteorStat n = new MeteorStat();
-        JsonLoader.Save(n, "Metoer_Stat");
         meteorStat = JsonLoader.Load<MeteorStat>("Metoer_Stat");
 
         this.hp = meteorStat.hp;
         this.speed = meteorStat.speed;
-        this.exp = meteorStat.exp;
         this.score = meteorStat.score;
         metoerMaxHp = hp;
 
@@ -64,14 +60,12 @@ public class MeteorStat
 {
     public float hp;
     public float speed;
-    public float exp;
     public float score;
 
     public MeteorStat()
     {
         hp = 50;
         speed = 45;
-        exp = 20;
         score = 30;
     }
 }   
