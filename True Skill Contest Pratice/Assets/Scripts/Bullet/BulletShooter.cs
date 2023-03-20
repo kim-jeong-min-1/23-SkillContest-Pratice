@@ -31,6 +31,7 @@ public class BulletShooter : MonoBehaviour
         curFireBullet = bullet;
         BulletSubject.Instance.AddBullet(bullet);
     }
+
     public void fire(Quaternion rot)
     {
         Bullet bullet;

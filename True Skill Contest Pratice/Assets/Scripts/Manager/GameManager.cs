@@ -31,7 +31,7 @@ public class GameManager : Singleton<GameManager>
     {
         int conditon = curStagetNum switch
         {
-            1 => 20,
+            1 => 100,
             2 => 150,
             3 => 200,
             _ => 0

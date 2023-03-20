@@ -108,10 +108,10 @@ public abstract class Enemy : MonoBehaviour
     }
     protected virtual void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PlayerBullet"))
-        {
-            var bullet = other.GetComponent<Bullet>();
+        var bullet = other.GetComponent<Bullet>();
 
+        if (bullet && (bullet.type == BulletType.Player || bullet.type == BulletType.ChangePlayer))
+        {
             bullet.isHit = true;
             GetDamage(bullet.damage);
         }
@@ -127,7 +127,7 @@ public class EnemyStat
     public EnemyStat()
     {
         hp = 100f;
-        speed = 45f;
+        speed = 40f;
         score = 50;
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public BulletType type { get; set; }
     public float speed { get; set; }
     public float damage { get; set; }
     public bool isHit { get; set; }
@@ -14,7 +15,7 @@ public class Bullet : MonoBehaviour
         this.damage = damage; 
         this.transform.rotation = rot;
         this.isHit = false;
-        SetTag(type);
+        SetType(type);
     }
 
     public virtual void SetBullet(float speed, float damage, Quaternion rot)
@@ -26,15 +27,15 @@ public class Bullet : MonoBehaviour
     }
 
 
-    public void SetTag(EntityType type)
+    public void SetType(EntityType type)
     {
         if(EntityType.player == type)
         {
-            this.tag = "PlayerBullet";
+            this.type = BulletType.Player;
         }
         else
         {
-            this.tag = "EnemyBullet";
+            this.type = BulletType.Enemy;
         }
     }
 
@@ -54,4 +55,11 @@ public class Bullet : MonoBehaviour
     {
         transform.Translate(new Vector3(0, 0, speed * Time.deltaTime));
     }
+}
+
+public enum BulletType
+{
+    Player,
+    Enemy,
+    ChangePlayer
 }

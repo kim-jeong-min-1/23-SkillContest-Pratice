@@ -12,6 +12,7 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private Image fuelBar;
 
     private PlayerInput playerInput;
+    private PlayerSkill playerSkill;
     private BulletShooter shooter;
     private Transform target;
     private Transform model;
@@ -25,6 +26,7 @@ public class PlayerController : Singleton<PlayerController>
     private float shotCurTime = 0f;
     private float hitCurTime = 0f;
     private float playerHitDelayTime = 1f;
+
     private float rotaionSpeed = 0.25f;
     private Quaternion targetDir;
 
@@ -58,6 +60,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         playerStat = JsonLoader.Load<PlayerStat>("Player_Stat");
         playerInput = GetComponent<PlayerInput>();
+        playerSkill = GetComponent<PlayerSkill>();
         shooter = GetComponent<BulletShooter>();
         model = gameObject.transform.Find("model").transform;
 
@@ -104,7 +107,7 @@ public class PlayerController : Singleton<PlayerController>
         }
         else
         {
-            Quaternion targetRot = Quaternion.Slerp(model.rotation, Quaternion.Euler(0,0,0), rotaionSpeed);
+            Quaternion targetRot = Quaternion.Slerp(model.rotation, Quaternion.Euler(0, 0, 0), rotaionSpeed);
             model.rotation = targetRot;
         }
     }
@@ -136,7 +139,8 @@ public class PlayerController : Singleton<PlayerController>
     }
     private void PlayerSkill()
     {
-        if (playerInput.playerSkill_1) BulletSubject.Instance.ChangeType(EntityType.player);
+        if (playerInput.playerSkill_1) playerSkill.ActiveSkill_1();
+        if (playerInput.playerSkill_2) playerSkill.ActiveSkill_2();
     }
 
     private void SetDeltaTime()
@@ -146,12 +150,13 @@ public class PlayerController : Singleton<PlayerController>
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("EnemyBullet"))
+        var bullet = other.GetComponent<Bullet>();
+        if (bullet && bullet.type == BulletType.Enemy)
         {
             if (hitCurTime >= playerHitDelayTime)
             {
                 hitCurTime = 0f;
-                Hp -= other.GetComponent<Bullet>().damage;
+                Hp -= bullet.damage;
                 UIManager.Instance.PlayerHitUIEffect(playerHitDelayTime);
             }
         }

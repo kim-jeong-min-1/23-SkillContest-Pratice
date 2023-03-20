@@ -8,6 +8,9 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Image playerHitUI;
     [SerializeField] private Image targetSightUI;
     [SerializeField] private TextMeshProUGUI qusetUI;
+    [SerializeField] private Image playerSkill_1UI;
+    [SerializeField] private Image playerSkill_2UI;
+    [SerializeField] private Image flashUI;
 
     private void Awake() => SetInstance();
 
@@ -21,17 +24,14 @@ public class UIManager : Singleton<UIManager>
 
     }
 
-    public void QusetUIUpdate(string text)
-    {
-        qusetUI.text = text;
-    }
-
+    public void Skill1_UIUpdate(float value) => playerSkill_1UI.fillAmount = value; 
+    public void Skill2_UIUpdate(float value) => playerSkill_2UI.fillAmount = value;
+    public void QusetUIUpdate(string text) => qusetUI.text = text;
     public void TargetSightUpdate(Vector3 pos)
     {
         var targetPos = Camera.main.WorldToScreenPoint(pos);
         targetSightUI.rectTransform.position = targetPos;
     }
-
     public void PlayerHitUIEffect(float time)
     {
         StartCoroutine(PlayerHitUIEffect(time));
@@ -65,6 +65,39 @@ public class UIManager : Singleton<UIManager>
             }
 
             yield break;
+        }
+    }
+    public void FlashEffect(float time)
+    {
+        StartCoroutine(FlashEffect(time));
+
+        IEnumerator FlashEffect(float time)
+        {
+            float current = 0;
+            float percent = 0;
+            Color tempColor = flashUI.color;
+
+            while (percent < 1)
+            {
+                current += Time.deltaTime;
+                percent = current / (time * 0.3f);
+      
+                tempColor.a = Mathf.Lerp(0, 1, percent);
+                flashUI.color = tempColor;
+
+                yield return null;
+            }
+
+            current = 0; percent = 0;
+            while (percent < 1)
+            {
+                current += Time.deltaTime;
+                percent = current / (time * 0.7f);
+
+                tempColor.a = Mathf.Lerp(1, 0, percent);
+                flashUI.color = tempColor;
+                yield return null;
+            }
         }
     }
 }
