@@ -70,7 +70,7 @@ public class PlayerController : Singleton<PlayerController>
     }
 
     public void Awake()
-    {        
+    {
         SetInstance();
         SetPlayer();
     }
@@ -84,6 +84,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         FindToTarget();
         PlayerShot();
+        PlayerSkill();
         SetDeltaTime();
     }
 
@@ -96,19 +97,33 @@ public class PlayerController : Singleton<PlayerController>
     }
     private void PlayerRotate()
     {
-        Quaternion targetRot = Quaternion.Slerp(model.rotation, targetDir, rotaionSpeed);
-        model.rotation = targetRot;
+        if (target != null)
+        {
+            Quaternion targetRot = Quaternion.Slerp(model.rotation, targetDir, rotaionSpeed);
+            model.rotation = targetRot;
+        }
+        else
+        {
+            Quaternion targetRot = Quaternion.Slerp(model.rotation, Quaternion.Euler(0,0,0), rotaionSpeed);
+            model.rotation = targetRot;
+        }
     }
     private void FindToTarget()
     {
-        target = EnemySubject.Instance.NearToTargetEnemy(transform.position);
-
-        if(target != null)
+        if (target != null)
         {
             var dis = target.position - transform.position;
             dis.y = 0;
 
             targetDir = Quaternion.LookRotation(dis);
+            UIManager.Instance.TargetSightUpdate(target.position);
+        }
+        else
+        {
+            target = EnemySubject.Instance.NearToTargetEnemy(transform.position);
+
+            if (target == null && GameManager.Instance.curStageBoss)
+                target = GameManager.Instance.curStageBoss.transform;
         }
     }
     private void PlayerShot()
@@ -116,14 +131,12 @@ public class PlayerController : Singleton<PlayerController>
         if (!playerInput.playerShot || shotCurTime < shooter.cool) return;
         shotCurTime = 0f;
 
-        if (target != null)
-        {
-            shooter.fire(targetDir);
-        }
-        else
-        {
-            shooter.fire();
-        }       
+        if (target != null) shooter.fire(targetDir);
+        else shooter.fire();
+    }
+    private void PlayerSkill()
+    {
+        if (playerInput.playerSkill_1) BulletSubject.Instance.ChangeType(EntityType.player);
     }
 
     private void SetDeltaTime()
@@ -131,7 +144,6 @@ public class PlayerController : Singleton<PlayerController>
         shotCurTime += Time.deltaTime;
         hitCurTime += Time.deltaTime;
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("EnemyBullet"))

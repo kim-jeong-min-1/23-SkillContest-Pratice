@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour
     }
 
 
-    private void SetTag(EntityType type)
+    public void SetTag(EntityType type)
     {
         if(EntityType.player == type)
         {
@@ -42,6 +42,12 @@ public class Bullet : MonoBehaviour
     {
         var sprite = gameObject.transform.Find("sprite").GetComponent<SpriteRenderer>();
         sprite.color = color;
+    }
+
+    public void Reflection()
+    {
+        var refelct = transform.eulerAngles + new Vector3(0, -180f, 0);
+        transform.rotation = Quaternion.Euler(refelct);
     }
 
     public virtual void BulletMovement()

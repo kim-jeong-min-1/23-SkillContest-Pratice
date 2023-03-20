@@ -56,4 +56,19 @@ public class BulletSubject : Singleton<BulletSubject>
         }
         destroyBullets.Clear();
     }
+
+    public void ChangeType(EntityType type)
+    {
+        foreach(var bullet in bullets)
+        {
+            if (bullet.CompareTag("EnemyBullet"))
+            {
+                bullet.Reflection();
+                bullet.SetTag(type);
+                bullet.SetSpriteColor(Color.cyan);
+                bullet.speed = 50;
+                bullet.damage = bullet.damage / 5;
+            }
+        }
+    }
 }

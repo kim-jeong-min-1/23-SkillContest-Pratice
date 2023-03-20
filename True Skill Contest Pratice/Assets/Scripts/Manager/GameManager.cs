@@ -5,8 +5,9 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     public int curStagetNum { get; private set; } = 0;
-    public int qusetCondtion { get; private set; }
-    public bool qusetComplete { get; set; }
+    public int qusetCondtion { get; private set; } = 0;
+    public bool qusetComplete { get; set; } = false;
+    public Boss curStageBoss { get; set; } = null;
 
     [SerializeField] private List<Boss> bossPrefabs;
 
@@ -18,9 +19,10 @@ public class GameManager : Singleton<GameManager>
 
     private void SetGameManager()
     {
+        EnemySubject.Instance.enemyCount = 0;
         curStagetNum++;
         qusetComplete = false;
-        EnemySubject.Instance.enemyCount = 0;
+        curStageBoss = null;
 
         SetQuset();
     }
@@ -29,7 +31,7 @@ public class GameManager : Singleton<GameManager>
     {
         int conditon = curStagetNum switch
         {
-            1 => 100,
+            1 => 20,
             2 => 150,
             3 => 200,
             _ => 0
@@ -42,6 +44,13 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.QusetUIUpdate($"Enemy {EnemySubject.Instance.enemyCount} / {qusetCondtion}");
 
         if (EnemySubject.Instance.enemyCount == qusetCondtion) qusetComplete = true;
-    } 
+
+        if (qusetComplete && curStageBoss == null)
+        {
+            curStageBoss
+            = Instantiate(bossPrefabs[curStagetNum - 1], new Vector3(0, 0, 100f), Quaternion.identity);
+        }
+
+    }
 }
 

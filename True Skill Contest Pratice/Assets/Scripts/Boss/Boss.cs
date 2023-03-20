@@ -122,7 +122,7 @@ public class BossStat
 
     public BossStat()
     {
-        hp = 20000f;
+        hp = 5000f;
         speed = 30f;
         score = 200;
     }

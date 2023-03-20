@@ -23,7 +23,7 @@ public class CameraMovment : MonoBehaviour
         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPosition, cameraSpeed * Time.deltaTime);
 
         mainCamera.transform.position = 
-            new Vector3(Mathf.Clamp(mainCamera.transform.position.x, -Utils.moveLimit.x + 25f, Utils.moveLimit.x - 25f),
+            new Vector3(Mathf.Clamp(mainCamera.transform.position.x, -Utils.moveLimit.x + 58f, Utils.moveLimit.x - 58f),
             mainCamera.transform.position.y, Mathf.Clamp(mainCamera.transform.position.z, -Utils.moveLimit.y + 2f, Utils.moveLimit.y - 40f));
     }
 }

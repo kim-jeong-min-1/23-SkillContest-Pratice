@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Utils
 {
-    public static readonly Vector2 moveLimit = new Vector2(55f, 30f);
+    public static readonly Vector2 moveLimit = new Vector2(88f, 30f);
     public static readonly Vector2 spawnLimit = new Vector2(55f, 80f);
 
     public static bool ObjectOutCheck(Vector3 pos)

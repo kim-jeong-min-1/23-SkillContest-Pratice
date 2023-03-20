@@ -6,6 +6,7 @@ using TMPro;
 public class UIManager : Singleton<UIManager>
 {
     [SerializeField] private Image playerHitUI;
+    [SerializeField] private Image targetSightUI;
     [SerializeField] private TextMeshProUGUI qusetUI;
 
     private void Awake() => SetInstance();
@@ -17,12 +18,18 @@ public class UIManager : Singleton<UIManager>
 
     private void SetUI()
     {
-        
+
     }
 
     public void QusetUIUpdate(string text)
     {
         qusetUI.text = text;
+    }
+
+    public void TargetSightUpdate(Vector3 pos)
+    {
+        var targetPos = Camera.main.WorldToScreenPoint(pos);
+        targetSightUI.rectTransform.position = targetPos;
     }
 
     public void PlayerHitUIEffect(float time)
