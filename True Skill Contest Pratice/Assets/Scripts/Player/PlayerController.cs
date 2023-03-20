@@ -5,7 +5,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerController : Singleton<PlayerController>
+public partial class PlayerController : Singleton<PlayerController>
 {
     [SerializeField] private PlayerStat playerStat;
     [SerializeField] private Image hpBar;
@@ -13,7 +13,6 @@ public class PlayerController : Singleton<PlayerController>
 
     private PlayerInput playerInput;
     private PlayerSkill playerSkill;
-    private BulletShooter shooter;
     private Transform target;
     private Transform model;
 
@@ -25,7 +24,10 @@ public class PlayerController : Singleton<PlayerController>
 
     private float shotCurTime = 0f;
     private float hitCurTime = 0f;
+    private float invisCurTime = 0f;
     private float playerHitDelayTime = 1f;
+    private float playerInvisDelayTime = 3.5f;
+    private bool isInvis = false;
 
     private float rotaionSpeed = 0.25f;
     private Quaternion targetDir;
@@ -61,7 +63,7 @@ public class PlayerController : Singleton<PlayerController>
         playerStat = JsonLoader.Load<PlayerStat>("Player_Stat");
         playerInput = GetComponent<PlayerInput>();
         playerSkill = GetComponent<PlayerSkill>();
-        shooter = GetComponent<BulletShooter>();
+        shooters = new List<BulletShooter>();
         model = gameObject.transform.Find("model").transform;
 
         playerHp = playerStat.hp;
@@ -70,6 +72,7 @@ public class PlayerController : Singleton<PlayerController>
 
         playerMaxHp = playerHp;
         playerMaxFuel = playerFuel;
+        ShooterLevel++;
     }
 
     public void Awake()
@@ -131,25 +134,40 @@ public class PlayerController : Singleton<PlayerController>
     }
     private void PlayerShot()
     {
-        if (!playerInput.playerShot || shotCurTime < shooter.cool) return;
+        if (!playerInput.playerShot || shotCurTime < shotCool) return;
         shotCurTime = 0f;
 
-        if (target != null) shooter.fire(targetDir);
-        else shooter.fire();
+        if (target != null) ShotBullet(targetDir);
+        else ShotBullet();
     }
     private void PlayerSkill()
     {
         if (playerInput.playerSkill_1) playerSkill.ActiveSkill_1();
         if (playerInput.playerSkill_2) playerSkill.ActiveSkill_2();
     }
-
     private void SetDeltaTime()
     {
         shotCurTime += Time.deltaTime;
         hitCurTime += Time.deltaTime;
     }
+    private IEnumerator PlayerInvis()
+    {
+        invisCurTime = 0f;
+        isInvis = true;
+
+        while (invisCurTime < playerInvisDelayTime)
+        {
+            invisCurTime += Time.deltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        isInvis = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
+        if (isInvis) return;
+
         var bullet = other.GetComponent<Bullet>();
         if (bullet && bullet.type == BulletType.Enemy)
         {

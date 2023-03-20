@@ -470,11 +470,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 914569156e1ad0f40b5fb98c5d8851c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHp: 200
-  playerFuel: 1000
-  moveSpeed: 30
+  playerStat:
+    hp: 200
+    speed: 45
+    fuel: 1000
   hpBar: {fileID: 3167317197688909470}
   fuelBar: {fileID: 3167317196928427159}
+  shooterObj: {fileID: 0}
 --- !u!114 &3167317197628155837
 MonoBehaviour:
   m_ObjectHideFlags: 0

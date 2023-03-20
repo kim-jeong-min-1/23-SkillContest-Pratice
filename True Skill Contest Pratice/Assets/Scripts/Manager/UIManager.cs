@@ -8,9 +8,11 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Image playerHitUI;
     [SerializeField] private Image targetSightUI;
     [SerializeField] private TextMeshProUGUI qusetUI;
+
     [SerializeField] private Image playerSkill_1UI;
     [SerializeField] private Image playerSkill_2UI;
     [SerializeField] private Image flashUI;
+    [SerializeField] private Text skillDisableText;
 
     private void Awake() => SetInstance();
 
@@ -24,9 +26,20 @@ public class UIManager : Singleton<UIManager>
 
     }
 
-    public void Skill1_UIUpdate(float value) => playerSkill_1UI.fillAmount = value; 
+    public void Skill1_UIUpdate(float value) => playerSkill_1UI.fillAmount = value;
     public void Skill2_UIUpdate(float value) => playerSkill_2UI.fillAmount = value;
     public void QusetUIUpdate(string text) => qusetUI.text = text;
+    public void SkillDisable()
+    {
+        StartCoroutine(skillDisable());
+
+        IEnumerator skillDisable()
+        {
+            skillDisableText.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.25f);
+            skillDisableText.gameObject.SetActive(false);
+        }
+    }
     public void TargetSightUpdate(Vector3 pos)
     {
         var targetPos = Camera.main.WorldToScreenPoint(pos);
@@ -81,7 +94,7 @@ public class UIManager : Singleton<UIManager>
             {
                 current += Time.deltaTime;
                 percent = current / (time * 0.3f);
-      
+
                 tempColor.a = Mathf.Lerp(0, 1, percent);
                 flashUI.color = tempColor;
 

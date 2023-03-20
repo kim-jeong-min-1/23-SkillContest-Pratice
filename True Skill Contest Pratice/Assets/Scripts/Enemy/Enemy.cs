@@ -127,7 +127,7 @@ public class EnemyStat
     public EnemyStat()
     {
         hp = 100f;
-        speed = 40f;
+        speed = 35f;
         score = 50;
     }
 }

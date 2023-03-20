@@ -8,20 +8,22 @@ public class PlayerSkill : MonoBehaviour
     private readonly float activeSkill_2CoolTime = 15f;
     private bool activeSkill_1On = true;
     private bool activeSkill_2On = true;
+    
 
     public void ActiveSkill_1()
     {
         if (activeSkill_1On) StartCoroutine(PlayerActiveSkill1());
+        else UIManager.Instance.SkillDisable();
     }
     public void ActiveSkill_2()
     {
         if (activeSkill_2On) StartCoroutine(PlayerActiveSkill2());
+        else UIManager.Instance.SkillDisable(); 
     }
-
     private IEnumerator PlayerActiveSkill1()
     {
         BulletSubject.Instance.ReflectToEnemyBullet();
-        UIManager.Instance.FlashEffect(0.66f);
+        UIManager.Instance.FlashEffect(0.8f);
 
         activeSkill_1On = false;
 
@@ -33,7 +35,7 @@ public class PlayerSkill : MonoBehaviour
     }
     private IEnumerator PlayerActiveSkill2()
     {
-        PlayerController.Instance.Hp += 25f;
+        PlayerController.Instance.Hp += 50f;
         activeSkill_2On = false;
 
         yield return 
