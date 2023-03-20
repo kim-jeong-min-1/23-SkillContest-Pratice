@@ -65,7 +65,7 @@ public class BulletSubject : Singleton<BulletSubject>
             {
                 bullet.Reflection();
                 bullet.SetTag(type);
-                bullet.SetSpriteColor(Color.cyan);
+                bullet.SetSpriteColor(Color.white);
                 bullet.speed = 50;
                 bullet.damage = bullet.damage / 5;
             }

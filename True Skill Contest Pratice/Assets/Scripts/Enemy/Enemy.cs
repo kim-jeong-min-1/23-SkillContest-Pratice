@@ -22,6 +22,8 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void SetEnemy()
     {
+        EnemyStat n = new EnemyStat();
+        JsonLoader.Save(n, "Enemy_Stat");
         enemyStat = JsonLoader.Load<EnemyStat>("Enemy_Stat");
         player = FindObjectOfType<PlayerController>().transform;
         shooter = GetComponent<BulletShooter>();     
@@ -125,7 +127,7 @@ public class EnemyStat
     public EnemyStat()
     {
         hp = 100f;
-        speed = 30f;
+        speed = 45f;
         score = 50;
     }
 }
