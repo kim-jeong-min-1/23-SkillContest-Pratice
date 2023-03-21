@@ -16,7 +16,7 @@ public partial class PlayerController
         get => curShooterLevel;
         set
         {
-            if (value <= maxShooterLevel)
+            if (value <= maxShooterLevel && value != curShooterLevel)
             {
                 curShooterLevel = value;
                 SetShooter();
@@ -66,12 +66,12 @@ public partial class PlayerController
         shooters.Clear();
     }
 
-    private void ShotBullet()
+    public void ShotBullet()
     {
         for (int i = 0; i < shooters.Count; i++) shooters[i].fire();
     }
 
-    private void ShotBullet(Quaternion rot)
+    public void ShotBullet(Quaternion rot)
     {
         for (int i = 0; i < shooters.Count; i++) shooters[i].fire(rot);
     }

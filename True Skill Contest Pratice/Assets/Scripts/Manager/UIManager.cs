@@ -18,7 +18,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Text skillDisableText;
 
     [Space(20f)]
-    [SerializeField] private GameObject levelUpUIGroup;
+    [SerializeField] private GameObject skillSelectUIGroup;
     [SerializeField] private List<SelectUI> selectUIs;
 
     private void Awake() => SetInstance();
@@ -30,32 +30,50 @@ public class UIManager : Singleton<UIManager>
 
     private void SetUI()
     {
-        LevelUpUIOn();
+
     }
 
-    public void LevelUpUIOn()
+    public void SkillSelectUpUIOn()
     {
-        StartCoroutine(LevelUpUIOn());
+        StartCoroutine(SkillSelectUpUIOn());
 
-        IEnumerator LevelUpUIOn()
+        IEnumerator SkillSelectUpUIOn()
         {
-            levelUpUIGroup.SetActive(true);
-            Time.timeScale = 0.3f;
-
+            skillSelectUIGroup.SetActive(true);
             for (int i = 0; i < selectUIs.Count; i++)
             {
                 var startPos = new Vector3(selectUIs[i].offsetX, -1000f);
                 var endPos = new Vector3(selectUIs[i].offsetX, 20f);
 
                 if (i == selectUIs.Count - 1)
-                    yield return StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 2 * 0.3f));
+                    yield return StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 0.6f * Time.timeScale));
                 else
-                    StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 2 * 0.3f));
+                    StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 0.6f * Time.timeScale));
 
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.02f);
             }
+            SkillSelectUpUIOff();
+        }
+    }
+    public void SkillSelectUpUIOff()
+    {
+        StartCoroutine(SkillSelectUpUIOff());
 
-            Time.timeScale = 1f;
+        IEnumerator SkillSelectUpUIOff()
+        {
+            for (int i = 0; i < selectUIs.Count; i++)
+            {
+                var startPos = new Vector3(selectUIs[i].offsetX, 20f);
+                var endPos = new Vector3(selectUIs[i].offsetX, -1000f);
+
+                if (i == selectUIs.Count - 1)
+                    yield return StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 0.6f * Time.timeScale));
+                else
+                    StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 0.6f * Time.timeScale));
+
+                yield return new WaitForSeconds(0.02f);
+            }
+            skillSelectUIGroup.SetActive(false);
         }
     }
 

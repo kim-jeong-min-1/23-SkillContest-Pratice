@@ -7,30 +7,31 @@ using UnityEngine.UI;
 
 public partial class PlayerController : Singleton<PlayerController>
 {
+    private PlayerInput playerInput;
+    private PlayerSkill playerSkill;
+    private Transform model;
+
     [SerializeField] private PlayerStat playerStat;
     [SerializeField] private Image hpBar;
     [SerializeField] private Image fuelBar;
 
-    private PlayerInput playerInput;
-    private PlayerSkill playerSkill;
-    private Transform target;
-    private Transform model;
+    [Space(20f)]
+    [SerializeField] private GameObject rayzer;
+    [SerializeField] private GameObject shield;
 
     private float playerHp;
     private float playerMaxHp;
     private float playerFuel;
     private float playerMaxFuel;
     private float playerSpeed;
+    private float rotaionSpeed = 0.25f;
 
     private float shotCurTime = 0f;
     private float hitCurTime = 0f;
-    private float invisCurTime = 0f;
     private float playerHitDelayTime = 1f;
-    private float playerInvisDelayTime = 3.5f;
     private bool isInvis = false;
-
-    private float rotaionSpeed = 0.25f;
     private Quaternion targetDir;
+    public Transform target { get; private set; }
 
     public float Hp
     {
@@ -150,18 +151,43 @@ public partial class PlayerController : Singleton<PlayerController>
         shotCurTime += Time.deltaTime;
         hitCurTime += Time.deltaTime;
     }
-    private IEnumerator PlayerInvis()
+    public IEnumerator PlayerInvinCible(float time)
     {
-        invisCurTime = 0f;
+        float curTime = 0f;
         isInvis = true;
 
-        while (invisCurTime < playerInvisDelayTime)
+        while (curTime < time)
         {
-            invisCurTime += Time.deltaTime;
+            curTime += Time.deltaTime;
             yield return new WaitForFixedUpdate();
         }
 
         isInvis = false;
+    }
+    public IEnumerator PlayerRayzer(float time)
+    {
+        float curTime = 0f;
+        rayzer.SetActive(true);
+
+        while (curTime < time * 0.3f)
+        {
+            curTime += Time.deltaTime;
+            rayzer.transform.localScale = new Vector3(1.5f * curTime, 1, 1);
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        yield return new WaitForSeconds(time * 0.4f);
+
+        curTime = 0f;
+        while (curTime < time * 0.3f)
+        {
+            curTime += Time.deltaTime;
+            rayzer.transform.localScale = new Vector3(1f - 1.5f * curTime, 1, 1);
+
+            yield return new WaitForFixedUpdate();
+        }
+        rayzer.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)

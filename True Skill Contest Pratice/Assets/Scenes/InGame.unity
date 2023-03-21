@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -321,7 +321,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: RAYZER
@@ -1362,7 +1362,7 @@ MonoBehaviour:
   playerSkill_2UI: {fileID: 355334409}
   flashUI: {fileID: 26943250}
   skillDisableText: {fileID: 288026315}
-  levelUpUIGroup: {fileID: 1582878698}
+  skillSelectUIGroup: {fileID: 0}
   selectUIs:
   - ui: {fileID: 1655273637}
     offsetX: -550
@@ -1558,7 +1558,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\uD0C0\uAC9F\uC5D0\uAC8C \n\uB808\uC774\uC800\uB97C \n\uBC1C\uC0AC\uD569\uB2C8\uB2E4."
@@ -2110,7 +2110,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\uD0C0\uAC9F\uC5D0\uAC8C \n\uB808\uC774\uC800\uB97C \n\uBC1C\uC0AC\uD569\uB2C8\uB2E4."
@@ -2206,10 +2206,10 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uD0C0\uAC9F\uC5D0\uAC8C \n\uB808\uC774\uC800\uB97C \n\uBC1C\uC0AC\uD569\uB2C8\uB2E4."
+  m_Text: "\uD0C0\uAC9F\uC5D0\uAC8C \uB808\uC774\uC800\uB97C \uBC1C\uC0AC\uD569\uB2C8\uB2E4."
 --- !u!222 &807238130
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2481,7 +2481,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Level : 0'
@@ -3905,7 +3905,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1582878699}
   m_Layer: 5
-  m_Name: levelUpUI
+  m_Name: skillSelectUpUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4257,7 +4257,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Level : 0'
@@ -4353,7 +4353,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: RAYZER
