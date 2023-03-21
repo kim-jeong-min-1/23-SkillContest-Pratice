@@ -124,10 +124,10 @@ public class EnemyStat
     public float speed;
     public float score;
 
-    public EnemyStat()
+    public EnemyStat() 
     {
         hp = 100f;
-        speed = 35f;
+        speed = 30f;
         score = 50;
     }
 }
