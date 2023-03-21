@@ -2,17 +2,24 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class UIManager : Singleton<UIManager>
 {
+    [Space(20f)]
     [SerializeField] private Image playerHitUI;
     [SerializeField] private Image targetSightUI;
     [SerializeField] private TextMeshProUGUI qusetUI;
 
+    [Space(20f)]
     [SerializeField] private Image playerSkill_1UI;
     [SerializeField] private Image playerSkill_2UI;
     [SerializeField] private Image flashUI;
     [SerializeField] private Text skillDisableText;
+
+    [Space(20f)]
+    [SerializeField] private GameObject levelUpUIGroup;
+    [SerializeField] private List<SelectUI> selectUIs;
 
     private void Awake() => SetInstance();
 
@@ -23,7 +30,33 @@ public class UIManager : Singleton<UIManager>
 
     private void SetUI()
     {
+        LevelUpUIOn();
+    }
 
+    public void LevelUpUIOn()
+    {
+        StartCoroutine(LevelUpUIOn());
+
+        IEnumerator LevelUpUIOn()
+        {
+            levelUpUIGroup.SetActive(true);
+            Time.timeScale = 0.3f;
+
+            for (int i = 0; i < selectUIs.Count; i++)
+            {
+                var startPos = new Vector3(selectUIs[i].offsetX, -1000f);
+                var endPos = new Vector3(selectUIs[i].offsetX, 20f);
+
+                if (i == selectUIs.Count - 1)
+                    yield return StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 2 * 0.3f));
+                else
+                    StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 2 * 0.3f));
+
+                yield return new WaitForSeconds(0.2f);
+            }
+
+            Time.timeScale = 1f;
+        }
     }
 
     public void Skill1_UIUpdate(float value) => playerSkill_1UI.fillAmount = value;
@@ -50,7 +83,7 @@ public class UIManager : Singleton<UIManager>
         StartCoroutine(PlayerHitUIEffect(time));
         IEnumerator PlayerHitUIEffect(float time)
         {
-            Color tempColor = new Color(1, 1, 1, 1);
+            Color tempColor = Color.white;
             float current = 0;
             float percent = 0;
 
@@ -76,8 +109,6 @@ public class UIManager : Singleton<UIManager>
 
                 yield return null;
             }
-
-            yield break;
         }
     }
     public void FlashEffect(float time)
@@ -113,4 +144,29 @@ public class UIManager : Singleton<UIManager>
             }
         }
     }
+    private IEnumerator UIMovement(Image UI, Vector3 start, Vector3 end, float time)
+    {
+        float current = 0;
+        float percent = 0;
+
+        while (percent < 1)
+        {
+            current += Time.deltaTime;
+            percent = current / time;
+
+            UI.rectTransform.anchoredPosition = Vector3.Lerp(start, end, percent);
+            yield return null;
+        }
+    }
+}
+
+[System.Serializable]
+public struct SelectUI
+{
+    public Image ui;
+    public float offsetX;
+
+    public Text nameText;
+    public Text levelText;
+    public Text explainText;
 }

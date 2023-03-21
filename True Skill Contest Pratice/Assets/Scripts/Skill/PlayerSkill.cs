@@ -14,35 +14,37 @@ public class PlayerSkill : MonoBehaviour
     {
         if (activeSkill_1On) StartCoroutine(PlayerActiveSkill1());
         else UIManager.Instance.SkillDisable();
+
+        IEnumerator PlayerActiveSkill1()
+        {
+            BulletSubject.Instance.ReflectToEnemyBullet();
+            UIManager.Instance.FlashEffect(0.8f);
+
+            activeSkill_1On = false;
+
+            yield return
+                StartCoroutine(SkillTimer(activeSkill_1CoolTime, UIManager.Instance.Skill1_UIUpdate));
+
+            activeSkill_1On = true;
+            yield break;
+        }
     }
     public void ActiveSkill_2()
     {
         if (activeSkill_2On) StartCoroutine(PlayerActiveSkill2());
-        else UIManager.Instance.SkillDisable(); 
-    }
-    private IEnumerator PlayerActiveSkill1()
-    {
-        BulletSubject.Instance.ReflectToEnemyBullet();
-        UIManager.Instance.FlashEffect(0.8f);
+        else UIManager.Instance.SkillDisable();
 
-        activeSkill_1On = false;
+        IEnumerator PlayerActiveSkill2()
+        {
+            PlayerController.Instance.Hp += 50f;
+            activeSkill_2On = false;
 
-        yield return
-            StartCoroutine(SkillTimer(activeSkill_1CoolTime, UIManager.Instance.Skill1_UIUpdate));
+            yield return
+                StartCoroutine(SkillTimer(activeSkill_2CoolTime, UIManager.Instance.Skill2_UIUpdate));
 
-        activeSkill_1On = true;
-        yield break;
-    }
-    private IEnumerator PlayerActiveSkill2()
-    {
-        PlayerController.Instance.Hp += 50f;
-        activeSkill_2On = false;
-
-        yield return 
-            StartCoroutine(SkillTimer(activeSkill_2CoolTime, UIManager.Instance.Skill2_UIUpdate));
-
-        activeSkill_2On = true;
-        yield break;
+            activeSkill_2On = true;
+            yield break;
+        }
     }
     private IEnumerator SkillTimer(float coolTime, System.Action<float> uiUpdate = null)
     {
