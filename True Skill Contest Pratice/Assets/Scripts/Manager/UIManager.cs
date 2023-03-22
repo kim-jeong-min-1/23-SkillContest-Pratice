@@ -1,8 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System.Collections.Generic;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -19,7 +19,7 @@ public class UIManager : Singleton<UIManager>
 
     [Space(20f)]
     [SerializeField] private GameObject skillSelectUIGroup;
-    [SerializeField] private List<SelectUI> selectUIs;
+    [SerializeField] public List<SelectUI> selectUIs;
 
     private void Awake() => SetInstance();
 
@@ -33,11 +33,42 @@ public class UIManager : Singleton<UIManager>
 
     }
 
-    public void SkillSelectUpUIOn()
+    public void SetSelectUI(int index, Skill skill)
     {
-        StartCoroutine(SkillSelectUpUIOn());
+        var select = selectUIs[index];
 
-        IEnumerator SkillSelectUpUIOn()
+        select.nameText.text = $"{skill.name}";
+        select.explainText.text = $"{skill.explain}";
+        select.levelText.text = $"Level : {skill.level}";
+    }
+    public void SelectUIUpdate(int index)
+    {
+        StartCoroutine(SelectUIUpdate());
+        IEnumerator SelectUIUpdate()
+        {
+            for (int i = 0; i < selectUIs.Count; i++)
+            {
+                Vector3 startPos = new Vector3(selectUIs[i].offsetX, 20f);
+                Vector3 endPos;
+
+                if (i == index) endPos = new Vector3(selectUIs[i].offsetX, 100f);
+                else endPos = new Vector3(selectUIs[i].offsetX, 20f);
+
+                if (i == selectUIs.Count - 1)
+                    yield return StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 0.25f * Time.timeScale));
+                else
+                    StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 0.25f * Time.timeScale));
+
+                yield return null;
+            }
+        }
+        
+    }
+    public void SkillSelectOn()
+    {
+        StartCoroutine(SkillSelectUIOn());
+
+        IEnumerator SkillSelectUIOn()
         {
             skillSelectUIGroup.SetActive(true);
             for (int i = 0; i < selectUIs.Count; i++)
@@ -52,14 +83,13 @@ public class UIManager : Singleton<UIManager>
 
                 yield return new WaitForSeconds(0.02f);
             }
-            SkillSelectUpUIOff();
         }
     }
-    public void SkillSelectUpUIOff()
+    public void SkillSelectUIOff()
     {
-        StartCoroutine(SkillSelectUpUIOff());
+        StartCoroutine(SkillSelectUIOff());
 
-        IEnumerator SkillSelectUpUIOff()
+        IEnumerator SkillSelectUIOff()
         {
             for (int i = 0; i < selectUIs.Count; i++)
             {
@@ -70,8 +100,6 @@ public class UIManager : Singleton<UIManager>
                     yield return StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 0.6f * Time.timeScale));
                 else
                     StartCoroutine(UIMovement(selectUIs[i].ui, startPos, endPos, 0.6f * Time.timeScale));
-
-                yield return new WaitForSeconds(0.02f);
             }
             skillSelectUIGroup.SetActive(false);
         }
@@ -79,7 +107,6 @@ public class UIManager : Singleton<UIManager>
 
     public void Skill1_UIUpdate(float value) => playerSkill_1UI.fillAmount = value;
     public void Skill2_UIUpdate(float value) => playerSkill_2UI.fillAmount = value;
-    public void QusetUIUpdate(string text) => qusetUI.text = text;
     public void SkillDisable()
     {
         StartCoroutine(skillDisable());
@@ -91,11 +118,14 @@ public class UIManager : Singleton<UIManager>
             skillDisableText.gameObject.SetActive(false);
         }
     }
+
+    public void QusetUIUpdate(string text) => qusetUI.text = text;
     public void TargetSightUpdate(Vector3 pos)
     {
         var targetPos = Camera.main.WorldToScreenPoint(pos);
         targetSightUI.rectTransform.position = targetPos;
     }
+
     public void PlayerHitUIEffect(float time)
     {
         StartCoroutine(PlayerHitUIEffect(time));
@@ -162,6 +192,7 @@ public class UIManager : Singleton<UIManager>
             }
         }
     }
+
     private IEnumerator UIMovement(Image UI, Vector3 start, Vector3 end, float time)
     {
         float current = 0;

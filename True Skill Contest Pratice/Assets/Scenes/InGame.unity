@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1448,13 +1448,13 @@ MonoBehaviour:
   playerSkill_2UI: {fileID: 355334409}
   flashUI: {fileID: 26943250}
   skillDisableText: {fileID: 288026315}
-  skillSelectUIGroup: {fileID: 0}
+  skillSelectUIGroup: {fileID: 1582878698}
   selectUIs:
   - ui: {fileID: 1655273637}
     offsetX: -550
-    nameText: {fileID: 1840917257}
-    levelText: {fileID: 874282177}
-    explainText: {fileID: 576164624}
+    nameText: {fileID: 899583367}
+    levelText: {fileID: 685613100}
+    explainText: {fileID: 807238129}
   - ui: {fileID: 239056955}
     offsetX: 0
     nameText: {fileID: 88839816}
@@ -3336,6 +3336,7 @@ MonoBehaviour:
     fuel: 1000
   hpBar: {fileID: 858708159}
   fuelBar: {fileID: 1710412470}
+  playerRayzer: {fileID: 1341751322}
   rayzer: {fileID: 1341751319}
   shield: {fileID: 202229647}
   shooterObj: {fileID: 6231048254953731942, guid: 6e5b12be034516748bc739af8ef86420, type: 3}
@@ -3791,6 +3792,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1341751320}
   - component: {fileID: 1341751321}
+  - component: {fileID: 1341751322}
+  - component: {fileID: 1341751323}
   m_Layer: 0
   m_Name: rayzer
   m_TagString: PlayerRayzer
@@ -3865,6 +3868,31 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1341751322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341751319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0da64995a7c44774f9519533d726c9cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1341751323
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341751319}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5, y: 2.0000005, z: 0}
+  m_Center: {x: 1.1641532e-10, y: 1.0000002, z: 0}
 --- !u!1 &1353946338
 GameObject:
   m_ObjectHideFlags: 0
@@ -4065,8 +4093,8 @@ MonoBehaviour:
   - {fileID: 7244314369778777256, guid: 32986acabdcdd1d4ba603d47bac0e144, type: 3}
   - {fileID: 4294451274876378132, guid: cb3772d9c3ced7643afbc2a98e331d48, type: 3}
   enemyGroup: {fileID: 488921022}
-  maxDelay: 1.2
-  minDelay: 1.6
+  maxDelay: 1
+  minDelay: 1.2
 --- !u!1 &1582878698
 GameObject:
   m_ObjectHideFlags: 0

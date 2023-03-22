@@ -36,7 +36,7 @@ public class HpUP : Skill
         type = SkillType.HpUP;
         name = "HP UP";
         explain = "일정 시간마다 내구도를 수리합니다";
-        coolTime = 25f;
+        coolTime = 10f;
     }
 
     public override void UseSkill()
@@ -52,7 +52,7 @@ public class FuelUP : Skill
         type = SkillType.FuelUP;
         name = "FUEL UP";
         explain = "일정 시간마다 연료를 부여합니다.";
-        coolTime = 10f;
+        coolTime = 6f;
     }
     public override void UseSkill()
     {
@@ -67,11 +67,11 @@ public class Invis : Skill
         type = SkillType.Invis;
         name = "INVINCIBLE";
         explain = "일정 시간 마다 무적이 됩니다.";
-        coolTime = 20f;
+        coolTime = 8f;
     }
     public override void UseSkill()
     {
-        PlayerController.Instance.StartCoroutine(PlayerController.Instance.PlayerInvinCible(1.5f * level));
+        PlayerController.Instance.PlayerInvincible(1.5f * level);
     }
 }
 
@@ -97,7 +97,7 @@ public class CircleBullet : Skill
         type = SkillType.CircleBullet;
         name = "CIRCLE";
         explain = "일정 시간마다 원형으로 탄환을 발사합니다.";
-        coolTime = 8f;
+        coolTime = 6f;
     }
 
     public override void UseSkill()
@@ -108,7 +108,7 @@ public class CircleBullet : Skill
         {
             for (int i = 0; i < level; i++)
             {
-                for (int j = 0; j < 360; j += 360 / 10)
+                for (int j = 0; j < 360; j += 360 / 18)
                 {
                     var bullet = BulletPool.Instance.GetPlayerBullet();
                     bullet.SetBullet(100, 20, Quaternion.Euler(0, j, 0));
@@ -128,12 +128,12 @@ public class Rayzer : Skill
         type = SkillType.Rayzer;
         name = "RAYZER";
         explain = "일정시간 마다 타겟에게 레이저를 발사 합니다.";
-        coolTime = 8f;
+        coolTime = 7f;
     }
 
     public override void UseSkill()
     {
-        PlayerController.Instance.StartCoroutine(PlayerController.Instance.PlayerRayzer(1.5f * level));
+        PlayerController.Instance.PlayerRayzerOn(3f, 1.5f * level);
     }
 }
 
@@ -144,7 +144,7 @@ public class OneLapBullet : Skill
         type = SkillType.OneLapBullet;
         name = "ONE LAP";
         explain = "일정 시간마다 총알을 한 바퀴 발사합니다.";
-        coolTime = 8f;
+        coolTime = 6f;
     }
 
     public override void UseSkill()
@@ -153,10 +153,10 @@ public class OneLapBullet : Skill
         IEnumerator OneLapBullet()
         {
             int count = 8 + (level * 2);
-            for (int i = 0; i < 360; i+= 360 / count)
+            for (int i = 0; i <= 360; i+= 360 / count)
             {
                 PlayerController.Instance.ShotBullet(Quaternion.Euler(0, i, 0));
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(0.12f);
             }
         }
     }

@@ -91,7 +91,7 @@ public abstract class Boss : MonoBehaviour
         sprite.color = tempColor;
         yield break;
     }
-    private void GetDamage(float damage)
+    public void GetDamage(float damage)
     {
         if (bossHp - damage <= 0)
         {

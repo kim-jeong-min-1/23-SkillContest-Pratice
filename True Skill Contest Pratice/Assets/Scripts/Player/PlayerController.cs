@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public partial class PlayerController : Singleton<PlayerController>
 {
     private PlayerInput playerInput;
-    private PlayerSkill playerSkill;
+    private PlayerSkillSystem playerSkill;
     private Transform model;
 
     [SerializeField] private PlayerStat playerStat;
@@ -16,6 +16,7 @@ public partial class PlayerController : Singleton<PlayerController>
     [SerializeField] private Image fuelBar;
 
     [Space(20f)]
+    [SerializeField] private PlayerRayzer playerRayzer;
     [SerializeField] private GameObject rayzer;
     [SerializeField] private GameObject shield;
 
@@ -45,7 +46,6 @@ public partial class PlayerController : Singleton<PlayerController>
             hpBar.fillAmount = playerHp / playerMaxHp;
         }
     }
-
     public float Fuel
     {
         get => playerFuel;
@@ -63,7 +63,7 @@ public partial class PlayerController : Singleton<PlayerController>
     {
         playerStat = JsonLoader.Load<PlayerStat>("Player_Stat");
         playerInput = GetComponent<PlayerInput>();
-        playerSkill = GetComponent<PlayerSkill>();
+        playerSkill = GetComponent<PlayerSkillSystem>();
         shooters = new List<BulletShooter>();
         model = gameObject.transform.Find("model").transform;
 
@@ -151,44 +151,55 @@ public partial class PlayerController : Singleton<PlayerController>
         shotCurTime += Time.deltaTime;
         hitCurTime += Time.deltaTime;
     }
-    public IEnumerator PlayerInvinCible(float time)
+    public void PlayerInvincible(float time)
     {
-        float curTime = 0f;
-        isInvis = true;
-
-        while (curTime < time)
+        StartCoroutine(PlayerInvinCible(time));
+        IEnumerator PlayerInvinCible(float time)
         {
-            curTime += Time.deltaTime;
-            yield return new WaitForFixedUpdate();
-        }
+            float curTime = 0f;
+            isInvis = true;
+            shield.SetActive(isInvis);
 
-        isInvis = false;
+            while (curTime < time)
+            {
+                curTime += Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+
+            isInvis = false;
+            shield.SetActive(isInvis);
+        }
     }
-    public IEnumerator PlayerRayzer(float time)
+    public void PlayerRayzerOn(float time, float damage)
     {
-        float curTime = 0f;
-        rayzer.SetActive(true);
+        playerRayzer.rayzerDamage = damage;
+        StartCoroutine(PlayerRayzer(time));
 
-        while (curTime < time * 0.3f)
+        IEnumerator PlayerRayzer(float time)
         {
-            curTime += Time.deltaTime;
-            rayzer.transform.localScale = new Vector3(4f * curTime, 1, 1);
+            float curTime = 0f;
+            rayzer.SetActive(true);
 
-            yield return new WaitForFixedUpdate();
+            while (curTime < time * 0.5f)
+            {
+                curTime += Time.deltaTime;
+                rayzer.transform.localScale = new Vector3(4f * curTime, rayzer.transform.localScale.y, 1);
+                yield return new WaitForFixedUpdate();
+            }
+            yield return new WaitForSeconds(time * 0.4f);
+
+            curTime = 0f;
+            while (curTime < time * 0.1f)
+            {
+                curTime += Time.deltaTime;
+                if (rayzer.transform.localScale.x < 0)
+                    rayzer.transform.localScale = new Vector3(1f - 4f * curTime, rayzer.transform.localScale.y, 1);
+                yield return new WaitForFixedUpdate();
+            }
+            rayzer.SetActive(false);
         }
-
-        yield return new WaitForSeconds(time * 0.4f);
-
-        curTime = 0f;
-        while (curTime < time * 0.3f)
-        {
-            curTime += Time.deltaTime;
-            rayzer.transform.localScale = new Vector3(1f - 4f * curTime, 1, 1);
-
-            yield return new WaitForFixedUpdate();
-        }
-        rayzer.SetActive(false);
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (isInvis) return;

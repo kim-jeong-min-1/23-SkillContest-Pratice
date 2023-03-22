@@ -96,7 +96,7 @@ public abstract class Enemy : MonoBehaviour
         tempColor.a = 1;
         sprite.color = tempColor;
     }
-    private void GetDamage(float damage)
+    public void GetDamage(float damage)
     {
         if(enemyHp - damage <= 0)
         {

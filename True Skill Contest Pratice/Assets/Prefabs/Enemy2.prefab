@@ -287,7 +287,7 @@ GameObject:
   - component: {fileID: 4294451274876378131}
   m_Layer: 0
   m_Name: Enemy2
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -352,7 +352,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyHp: 0
   enemySpeed: 0
-  exp: 0
   score: 0
   enemyName: Enemy2
   enemyHpImage: {fileID: 4294451274903696820}
