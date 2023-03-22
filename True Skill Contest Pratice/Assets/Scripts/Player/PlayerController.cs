@@ -31,7 +31,7 @@ public partial class PlayerController : Singleton<PlayerController>
     private float playerHitDelayTime = 1f;
     private bool isInvis = false;
     private Quaternion targetDir;
-    public Transform target { get; private set; }
+    private Transform target;
 
     public float Hp
     {
@@ -172,7 +172,7 @@ public partial class PlayerController : Singleton<PlayerController>
         while (curTime < time * 0.3f)
         {
             curTime += Time.deltaTime;
-            rayzer.transform.localScale = new Vector3(1.5f * curTime, 1, 1);
+            rayzer.transform.localScale = new Vector3(4f * curTime, 1, 1);
 
             yield return new WaitForFixedUpdate();
         }
@@ -183,13 +183,12 @@ public partial class PlayerController : Singleton<PlayerController>
         while (curTime < time * 0.3f)
         {
             curTime += Time.deltaTime;
-            rayzer.transform.localScale = new Vector3(1f - 1.5f * curTime, 1, 1);
+            rayzer.transform.localScale = new Vector3(1f - 4f * curTime, 1, 1);
 
             yield return new WaitForFixedUpdate();
         }
         rayzer.SetActive(false);
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (isInvis) return;
