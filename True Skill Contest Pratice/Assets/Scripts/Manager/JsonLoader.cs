@@ -16,7 +16,7 @@ public class JsonLoader : MonoBehaviour
             return t;
         }
 
-        string data = File.ReadAllText(path);
+        string data = File.ReadAllText(path); 
         return JsonUtility.FromJson<T>(data);
     }
 

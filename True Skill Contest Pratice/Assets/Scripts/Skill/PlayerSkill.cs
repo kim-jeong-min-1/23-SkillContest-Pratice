@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerSkill : MonoBehaviour
@@ -31,19 +32,38 @@ public class PlayerSkill : MonoBehaviour
         UseSkill();
     }
 
-    public void GetSkill()
+    public void SelectSkill()
     {
 
     }
 
+    public Skill GetSkill()
+    {
+        Skill skill = null;
+        int randSkill = Random.Range(0, 7);
+
+        switch ((SkillType)randSkill)
+        {
+            case SkillType.HpUP: skill = new HpUP(); break;
+            case SkillType.FuelUP: skill = new FuelUP(); break;
+            case SkillType.Invis: skill = new Invis(); break;
+            case SkillType.BulletUP: skill = new BulletUP(); break;
+            case SkillType.CircleBullet: skill = new CircleBullet(); break;
+            case SkillType.OneLapBullet: skill = new OneLapBullet(); break;
+            case SkillType.Rayzer: skill = new Rayzer(); break;
+        }
+
+        return skill;
+    }
+
     private void UseSkill()
     {
+        if (playerSkills.Count <= 0) return;
         for (int i = 0; i < playerSkills.Count; i++)
         {
             var skill = playerSkills[i];
             if (skill.coolTime <= skill.curTime)
             {
-                if (skill.isAcive) continue;
                 skill.UseSkill();
                 skill.curTime = 0;
             }
@@ -51,12 +71,11 @@ public class PlayerSkill : MonoBehaviour
     }
     private void SkillDeltaTime()
     {
-        if (playerSkills.Count > 0)
-            for (int i = 0; i < playerSkills.Count; i++)
-            {
-                if (playerSkills[i].isAcive) continue;
-                playerSkills[i].curTime += Time.deltaTime;
-            }
+        if (playerSkills.Count <= 0) return;
+        for (int i = 0; i < playerSkills.Count; i++)
+        {
+            playerSkills[i].curTime += Time.deltaTime;
+        }
     }
     private Skill ReturnSkill(SkillType type)
     {
