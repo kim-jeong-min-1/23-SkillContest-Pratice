@@ -8,8 +8,8 @@ public partial class PlayerController
     [SerializeField] private BulletShooter shooterObj;
     public List<BulletShooter> shooters { get; set; }
 
-    private float shotCool = 0.15f;
-    private int maxShooterLevel = 4;
+    private readonly float shotCool = 0.15f;
+    private readonly int maxShooterLevel = 4;
     private float curShooterLevel;
     public float ShooterLevel
     {
@@ -21,7 +21,6 @@ public partial class PlayerController
                 curShooterLevel = value;
                 SetShooter();
             }
-            else return; //점수 추가
         }
     }
 

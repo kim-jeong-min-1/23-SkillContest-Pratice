@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
     public float speed { get; set; }
     public float damage { get; set; }
     public bool isHit { get; set; }
+    public bool isStop { get; set; }
 
     public virtual void SetBullet(float speed, float damage, Quaternion rot, EntityType type)
     {
@@ -15,6 +16,7 @@ public class Bullet : MonoBehaviour
         this.damage = damage; 
         this.transform.rotation = rot;
         this.isHit = false;
+        this.isStop = false;
         SetType(type);
     }
 
@@ -24,6 +26,7 @@ public class Bullet : MonoBehaviour
         this.damage = damage;
         this.transform.rotation = rot;
         this.isHit = false;
+        this.isStop = false;
     }
 
 

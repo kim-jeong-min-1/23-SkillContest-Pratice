@@ -16,7 +16,7 @@ public enum SkillType
 public abstract class Skill
 {
     public SkillType type { get; set; }
-    public int level { get; set; } = 1;
+    public int level { get; set; } = 0;
 
     public string name;
     public string explain;
@@ -52,11 +52,11 @@ public class FuelUP : Skill
         type = SkillType.FuelUP;
         name = "FUEL UP";
         explain = "일정 시간마다 연료를 부여합니다.";
-        coolTime = 6f;
+        coolTime = 10f;
     }
     public override void UseSkill()
     {
-        PlayerController.Instance.Fuel += 200 * level;
+        PlayerController.Instance.Fuel += 70 * level;
     }
 }
 
@@ -83,6 +83,7 @@ public class BulletUP : Skill
         name = "BULLET UP";
         explain = "플레이어의 공격을 한 단계 업그레이드 합니다.";
         isAcive = true;
+        level = 1;
     }
     public override void UseSkill()
     {
@@ -133,7 +134,7 @@ public class Rayzer : Skill
 
     public override void UseSkill()
     {
-        PlayerController.Instance.PlayerRayzerOn(3f, 1.5f * level);
+        PlayerController.Instance.PlayerRayzerOn(2f, 1.5f * level);
     }
 }
 

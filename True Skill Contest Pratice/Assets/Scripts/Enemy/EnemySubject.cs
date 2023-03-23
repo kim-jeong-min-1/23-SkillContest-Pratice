@@ -62,7 +62,7 @@ public class EnemySubject : Singleton<EnemySubject>
     {
         Instantiate(enemyDieEffect, pos, Quaternion.identity);
 
-        var randProb = Random.Range(1, 11);
+        var randProb = Random.Range(1, 21);
         if (randProb == 1) PlayerSkillSystem.Instance.SelectSkill();
     }
 

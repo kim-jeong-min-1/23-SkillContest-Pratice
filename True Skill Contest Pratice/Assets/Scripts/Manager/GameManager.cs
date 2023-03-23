@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     public int curStagetNum { get; private set; } = 0;
+    public int stageScore { get; private set; }
     public int qusetCondtion { get; private set; } = 0;
     public bool qusetComplete { get; set; } = false;
     public Boss curStageBoss { get; set; } = null;

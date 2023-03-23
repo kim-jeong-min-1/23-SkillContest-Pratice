@@ -28,6 +28,7 @@ public class PlayerSkillSystem : Singleton<PlayerSkillSystem>
     }
 
     private void Awake() => SetInstance();
+
     private void Update()
     {
         SkillDeltaTime();
@@ -40,6 +41,7 @@ public class PlayerSkillSystem : Singleton<PlayerSkillSystem>
 
         IEnumerator SelectSkill()
         {
+            PlayerController.Instance.enabled = false;
             Time.timeScale = 0.3f;
             int index = 0;
             int count = UIManager.Instance.selectUIs.Count;
@@ -48,7 +50,7 @@ public class PlayerSkillSystem : Singleton<PlayerSkillSystem>
             for (int i = 0; i < count; i++)
             {
                 var skill = CreateSkill();
-                var level = (GetSkill(skill.type) == null) ? 1 : GetSkill(skill.type).level;
+                var level = (GetSkill(skill.type) == null) ? skill.level : GetSkill(skill.type).level;
                 skill.level = level;
                 skills.Add(skill);
                 UIManager.Instance.SetSelectUI(i, skill);
@@ -58,11 +60,11 @@ public class PlayerSkillSystem : Singleton<PlayerSkillSystem>
 
             int temp = 999;
             while (!Input.GetKeyDown(KeyCode.Space))
-            {               
-                if (Input.GetKeyDown(KeyCode.LeftArrow)) index--;                   
+            {
+                if (Input.GetKeyDown(KeyCode.LeftArrow)) index--;
                 else if (Input.GetKeyDown(KeyCode.RightArrow)) index++;
 
-                if(index != temp)
+                if (index != temp)
                 {
                     index = Mathf.Clamp(index, 0, count - 1);
                     UIManager.Instance.SelectUIUpdate(index);
@@ -72,37 +74,43 @@ public class PlayerSkillSystem : Singleton<PlayerSkillSystem>
             }
 
             var existingSkill = GetSkill(skills[index].type);
-            if (existingSkill == null) playerSkills.Add(skills[index]);
-            else if(existingSkill.level < maxPlayerSkillLevel) existingSkill.level++;
+            if (existingSkill == null)
+            {
+                skills[index].level++;
+                playerSkills.Add(skills[index]);
+            }
+            else if (existingSkill.level < maxPlayerSkillLevel) existingSkill.level++;
+            //점수 추가
 
             //액티브 스킬은 바로 사용
             if (skills[index].isAcive) skills[index].UseSkill();
 
             Time.timeScale = 1f;
+            PlayerController.Instance.enabled = true;
             UIManager.Instance.SkillSelectUIOff();
             yield break;
-        }    
+        }
     }
     public Skill CreateSkill()
     {
         Skill skill = null;
-        int randSkill = Random.Range(0, 7);
+        int randSkill = Random.Range(0, 11);
 
         switch ((SkillType)randSkill)
         {
             case SkillType.HpUP: skill = new HpUP(); break;
-            case SkillType.FuelUP: skill = new FuelUP(); break;
             case SkillType.Invis: skill = new Invis(); break;
             case SkillType.BulletUP: skill = new BulletUP(); break;
             case SkillType.CircleBullet: skill = new CircleBullet(); break;
             case SkillType.OneLapBullet: skill = new OneLapBullet(); break;
             case SkillType.Rayzer: skill = new Rayzer(); break;
+            default: skill = new FuelUP(); break;
         }
         return skill;
     }
     private void UseSkill()
     {
-        if (playerSkills.Count <= 0 ) return;
+        if (playerSkills.Count <= 0) return;
         for (int i = 0; i < playerSkills.Count; i++)
         {
             var skill = playerSkills[i];

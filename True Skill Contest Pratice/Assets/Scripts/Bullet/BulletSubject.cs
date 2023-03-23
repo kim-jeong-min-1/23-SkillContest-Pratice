@@ -29,7 +29,7 @@ public class BulletSubject : Singleton<BulletSubject>
     {
         foreach (var bullet in bullets)
         {
-            bullet.BulletMovement();
+            if(!bullet.isStop) bullet.BulletMovement();
             if (bullet.isHit || Utils.ObjectOutCheck(bullet.transform.position))
             {                
                 destroyBullets.Add(bullet);

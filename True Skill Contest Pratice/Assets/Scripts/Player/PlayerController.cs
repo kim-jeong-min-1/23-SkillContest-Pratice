@@ -92,9 +92,14 @@ public partial class PlayerController : Singleton<PlayerController>
         FindToTarget();
         PlayerShot();
         PlayerSkill();
+        RunOutOfFuel();
         SetDeltaTime();
     }
 
+    private void RunOutOfFuel()
+    {
+        Fuel -= Time.deltaTime * 10;
+    }
     private void PlayerMovement()
     {
         transform.position += playerInput.moveInput * playerSpeed * Time.deltaTime;
@@ -180,21 +185,19 @@ public partial class PlayerController : Singleton<PlayerController>
             float curTime = 0f;
             rayzer.SetActive(true);
 
-            while (curTime < time * 0.5f)
+            while (curTime < time)
             {
                 curTime += Time.deltaTime;
-                rayzer.transform.localScale = new Vector3(4f * curTime, rayzer.transform.localScale.y, 1);
-                yield return new WaitForFixedUpdate();
+                rayzer.transform.localScale = new Vector3(4.5f * (curTime / time), rayzer.transform.localScale.y, 1);
+                yield return new WaitForEndOfFrame();
             }
-            yield return new WaitForSeconds(time * 0.4f);
 
             curTime = 0f;
-            while (curTime < time * 0.1f)
+            while (curTime < time)
             {
                 curTime += Time.deltaTime;
-                if (rayzer.transform.localScale.x < 0)
-                    rayzer.transform.localScale = new Vector3(1f - 4f * curTime, rayzer.transform.localScale.y, 1);
-                yield return new WaitForFixedUpdate();
+                rayzer.transform.localScale = new Vector3(4.5f - 4.5f * (curTime / time), rayzer.transform.localScale.y, 1);
+                yield return new WaitForEndOfFrame();
             }
             rayzer.SetActive(false);
         }
