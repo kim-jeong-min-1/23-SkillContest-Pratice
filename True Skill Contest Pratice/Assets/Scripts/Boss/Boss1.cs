@@ -17,7 +17,7 @@ public class Boss1 : Boss
     protected override void Awake()
     {
         base.Awake();
-        StartCoroutine(BossAI_Update());
+        bossPattern = StartCoroutine(BossAI_Update());
     }
 
     protected override IEnumerator BossAI_Update()
@@ -47,14 +47,14 @@ public class Boss1 : Boss
                     break;
             }
 
-            yield return new WaitForSeconds(1.8f);
+            yield return null;
         }       
     }
 
     private IEnumerator Pattern1()
     {
         repeatCount = 5;
-
+        StartCoroutine(MoveToPlayerPosition(Random.Range(-30, 30), 35f, 3f));
         for (int i = 0; i < repeatCount; i++)
         {
             for (int j = 0; j < 360; j += Random.Range(10, 30))
@@ -75,6 +75,7 @@ public class Boss1 : Boss
         repeatCount = 5;
         int dir = 0;
 
+        StartCoroutine(MoveToPlayerPosition(Random.Range(-30, 30), 35f, 3f));
         while (patternTime > curTime)
         {
             for (int i = 0; i < 360; i += 360 / repeatCount)
@@ -99,7 +100,7 @@ public class Boss1 : Boss
         curTime = 0;
         int dir = 0;
 
-        StartCoroutine(MoveToPlayerPosition(Random.Range(-15, 15), 20f, 1f));
+        StartCoroutine(MoveToPlayerPosition(Random.Range(-15, 15), 20f, 1.8f));
 
         for (int i = 0; i < repeatCount; i++)
         {

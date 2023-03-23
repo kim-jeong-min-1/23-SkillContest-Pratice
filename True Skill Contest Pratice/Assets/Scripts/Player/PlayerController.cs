@@ -96,10 +96,6 @@ public partial class PlayerController : Singleton<PlayerController>
         SetDeltaTime();
     }
 
-    private void RunOutOfFuel()
-    {
-        Fuel -= Time.deltaTime * 10;
-    }
     private void PlayerMovement()
     {
         transform.position += playerInput.moveInput * playerSpeed * Time.deltaTime;
@@ -156,6 +152,11 @@ public partial class PlayerController : Singleton<PlayerController>
         shotCurTime += Time.deltaTime;
         hitCurTime += Time.deltaTime;
     }
+    private void RunOutOfFuel()
+    {
+        Fuel -= Time.deltaTime * 8;
+    }
+
     public void PlayerInvincible(float time)
     {
         StartCoroutine(PlayerInvinCible(time));

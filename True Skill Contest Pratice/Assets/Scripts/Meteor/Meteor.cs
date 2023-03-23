@@ -10,9 +10,8 @@ public class Meteor : MonoBehaviour
     private float metoerMaxHp;
     private float hp;
     private float speed;
-    private float score;
     private int rotateDir;
-
+    public int score { get; private set; }
     public bool isDestroy { get; private set; }
 
     public float Hp
@@ -60,7 +59,7 @@ public class MeteorStat
 {
     public float hp;
     public float speed;
-    public float score;
+    public int score;
 
     public MeteorStat()
     {

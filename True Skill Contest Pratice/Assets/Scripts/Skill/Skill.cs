@@ -109,7 +109,7 @@ public class CircleBullet : Skill
         {
             for (int i = 0; i < level; i++)
             {
-                for (int j = 0; j < 360; j += 360 / 18)
+                for (int j = 0; j < 360; j += 360 / 20)
                 {
                     var bullet = BulletPool.Instance.GetPlayerBullet();
                     bullet.SetBullet(100, 20, Quaternion.Euler(0, j, 0));
@@ -153,7 +153,7 @@ public class OneLapBullet : Skill
         PlayerController.Instance.StartCoroutine(OneLapBullet());
         IEnumerator OneLapBullet()
         {
-            int count = 8 + (level * 2);
+            int count = 18 + (level * 2);
             for (int i = 0; i <= 360; i+= 360 / count)
             {
                 PlayerController.Instance.ShotBullet(Quaternion.Euler(0, i, 0));

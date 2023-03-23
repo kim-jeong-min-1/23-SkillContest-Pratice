@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMovment : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
     [SerializeField] private float cameraSpeed;
     [SerializeField] private Vector3 offset;

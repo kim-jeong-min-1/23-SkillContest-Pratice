@@ -15,7 +15,7 @@ public class Enemy2 : Enemy
 
     protected override IEnumerator EnemyAI_Update()
     {
-        yield return StartCoroutine(MoveToPlayerPosition(Random.Range(-30, 30), 35, 2f));
+        yield return StartCoroutine(MoveToPlayerPosition(Random.Range(-30, 30), 33, 1.25f));
 
         int patternRepeatCount = 0;
         int count = 0;
@@ -38,7 +38,7 @@ public class Enemy2 : Enemy
             {
                 count = 0;
                 patternRepeatCount++;
-                yield return StartCoroutine(MoveToPlayerPosition(Random.Range(-30, 30), 35, 3f));
+                yield return StartCoroutine(MoveToPlayerPosition(Random.Range(-30, 30), 35, 1.25f));
             }
             yield return null;
         }
@@ -63,7 +63,7 @@ public class Enemy2 : Enemy
 
     private IEnumerator pattern2()
     {
-        StartCoroutine(MoveToPlayerPosition(Random.Range(-30, 30), 33, 2));
+        StartCoroutine(MoveToPlayerPosition(Random.Range(-30, 30), 33, 1.5f));
 
         repeatCount = 4;
         for (int i = 0; i < repeatCount; i++)
@@ -91,7 +91,7 @@ public class Enemy2 : Enemy
 
         while (gameObject.activeSelf)
         {
-            var speed = Time.deltaTime * (enemySpeed * 2);
+            var speed = Time.deltaTime * enemySpeed;
             transform.Translate(new Vector3(x, 0, 1) * speed);
 
             yield return new WaitForEndOfFrame();

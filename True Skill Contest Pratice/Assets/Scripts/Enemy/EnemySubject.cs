@@ -44,7 +44,7 @@ public class EnemySubject : Singleton<EnemySubject>
     {
         foreach (var enemy in dieEnemies)
         {
-            if (enemy.isDie) EnemyDie(enemy.transform.position);
+            if (enemy.isDie) EnemyDie(enemy.score, enemy.transform.position);
 
             Destroy(enemy.gameObject);
             curEnemies.Remove(enemy);
@@ -58,9 +58,10 @@ public class EnemySubject : Singleton<EnemySubject>
         enemyCount++;
     }
 
-    private void EnemyDie(Vector3 pos)
+    private void EnemyDie(int score ,Vector3 pos)
     {
         Instantiate(enemyDieEffect, pos, Quaternion.identity);
+        GameManager.Instance.AddScore(score);
 
         var randProb = Random.Range(1, 21);
         if (randProb == 1) PlayerSkillSystem.Instance.SelectSkill();

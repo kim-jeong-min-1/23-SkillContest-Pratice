@@ -80,7 +80,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyHp: 0
   enemySpeed: 0
-  score: 0
   enemyName: Enemy1
   enemyHpImage: {fileID: 7244314371030949197}
   sprite: {fileID: 7244314371237529263}
@@ -99,7 +98,7 @@ MonoBehaviour:
   type: 1
   speed: 65
   damage: 10
-  cool: 0.8
+  cool: 0.6
 --- !u!1 &7244314370894221093
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,6 @@ public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] protected float enemyHp;
     [SerializeField] protected float enemySpeed;
-    [SerializeField] private float score;
     [SerializeField] private string enemyName;
 
     [SerializeField] private Image enemyHpImage;
@@ -18,6 +17,7 @@ public abstract class Enemy : MonoBehaviour
     protected BulletShooter shooter;
     protected Transform player;
 
+    public int score { get; private set; }
     public bool isDie { get; private set; }
 
     protected virtual void SetEnemy()
@@ -122,12 +122,12 @@ public class EnemyStat
 {
     public float hp;
     public float speed;
-    public float score;
+    public int score;
 
     public EnemyStat() 
     {
         hp = 100f;
-        speed = 30f;
+        speed = 40f;
         score = 50;
     }
 }

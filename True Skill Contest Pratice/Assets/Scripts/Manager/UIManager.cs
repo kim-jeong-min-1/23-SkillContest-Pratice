@@ -10,6 +10,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Image playerHitUI;
     [SerializeField] private Image targetSightUI;
     [SerializeField] private TextMeshProUGUI qusetUI;
+    [SerializeField] private TextMeshProUGUI scoreUI;
 
     [Space(20f)]
     [SerializeField] private Image playerSkill_1UI;
@@ -120,6 +121,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     public void QusetUIUpdate(string text) => qusetUI.text = text;
+    public void ScoreUIUpdate(string text) => scoreUI.text = text;
     public void TargetSightUpdate(Vector3 pos)
     {
         var targetPos = Camera.main.WorldToScreenPoint(pos);

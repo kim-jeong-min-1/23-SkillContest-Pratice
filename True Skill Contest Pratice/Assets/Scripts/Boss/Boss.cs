@@ -16,6 +16,7 @@ public abstract class Boss : MonoBehaviour
     protected BossStat bossStat;
     protected BulletShooter shooter;
     protected Transform player;
+    protected Coroutine bossPattern;
 
     public bool isDie { get; private set; }
 

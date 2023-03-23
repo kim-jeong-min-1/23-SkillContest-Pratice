@@ -40,9 +40,19 @@ public class GameManager : Singleton<GameManager>
         qusetCondtion = conditon;
     }
 
+    public void AddScore(int score) => stageScore += score;
+    public void PlayerActivationChanage()
+    {
+        PlayerController.Instance.enabled = !PlayerController.Instance.enabled;
+        PlayerSkillSystem.Instance.enabled = !PlayerSkillSystem.Instance.enabled;
+    }
+
+    
+
     private void Update()
     {
         UIManager.Instance.QusetUIUpdate($"Enemy {EnemySubject.Instance.enemyCount} / {qusetCondtion}");
+        UIManager.Instance.ScoreUIUpdate($"Score : {stageScore}");
 
         if (EnemySubject.Instance.enemyCount == qusetCondtion) qusetComplete = true;
 

@@ -32,7 +32,7 @@ public class MeteorSubject : Singleton<MeteorSubject>
         {
             if (meteor == null) continue;
             meteor.MeteorUpdate();
-            if ( meteor.isDestroy || Utils.ObjectOutCheck(meteor.transform.position))
+            if (meteor.isDestroy || Utils.ObjectOutCheck(meteor.transform.position))
             {
                 destroyMeteors.Add(meteor);
             }
@@ -43,15 +43,15 @@ public class MeteorSubject : Singleton<MeteorSubject>
     {
         foreach (var meteor in destroyMeteors)
         {
-            //if(meteor.isDestroy) //여기에 점수추가 구현
+            if (meteor.isDestroy) GameManager.Instance.AddScore(meteor.score);
 
             Destroy(meteor.gameObject);
             DestroyEffect(meteor.transform.position);
-            meteors.Remove(meteor);          
+            meteors.Remove(meteor);
         }
         destroyMeteors.Clear();
     }
-    
+
     private void DestroyEffect(Vector3 pos)
     {
         Instantiate(destroyEffect, pos, Quaternion.identity);
