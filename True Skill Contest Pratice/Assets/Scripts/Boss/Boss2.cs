@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Search;
 using UnityEngine;
 
 public class Boss2 : Boss
@@ -25,7 +26,7 @@ public class Boss2 : Boss
         {
             do
             {
-                randPattern = Random.Range(2, 2);
+                randPattern = Random.Range(3, 3);
                 yield return null;
             } while (prePattern == randPattern);
 
@@ -50,7 +51,7 @@ public class Boss2 : Boss
 
     private IEnumerator Pattern1()
     {
-        repeatCount = 4;
+        repeatCount = 8;
 
         for (int i = 0; i < repeatCount; i++)
         {
@@ -61,6 +62,7 @@ public class Boss2 : Boss
                 Vector3 rot = new Vector3(0, (k / 40f) * 360 + (float)i / repeatCount * 360f, 0);
                 var bullet = InstantiateBullet(Quaternion.Euler(rot));
                 bullet.SetSpriteColor(Color.green);
+                bullet.speed = 40;
             }
             yield return new WaitForSeconds(0.05f);
         }
@@ -74,13 +76,14 @@ public class Boss2 : Boss
         float cool = 0;
         float alpha = 0;
 
-        for (int k = 0; k < (360 / repeatCount) * 10; k++)
+        for (int k = 0; k < (360 / repeatCount) * 5; k++)
         {
             for (int i = 0; i < repeatCount; i++)
             {
-                Vector3 rot = new Vector3(0, ((float)i / repeatCount) * 360f + alpha * (360 / repeatCount), 0);
+                Vector3 rot = new Vector3(0, ((float)i / repeatCount) * 360 + alpha * 360, 0);
                 var bullet = InstantiateBullet(Quaternion.Euler(rot));
                 bullet.SetSpriteColor(Color.green);
+                bullet.speed = 40;
             }
             cool += 0.05f;
             alpha = Mathf.Sin(cool);
@@ -91,6 +94,43 @@ public class Boss2 : Boss
 
     private IEnumerator Pattern3()
     {
+        repeatCount = 40;
+        float radius = 3;
+        float dir = 0;
+        Vector3 center = transform.position;
+
+        //for (int j = 0; j < repeatCount; j++)
+        //{
+        //    for (int i = 0; i < 360; i += 360 / 12)
+        //    {
+        //        var pos = new Vector3(Mathf.Cos(i * Mathf.Deg2Rad) * radius, 0, Mathf.Sin(i * Mathf.Deg2Rad) * radius) + center;
+        //        Bullet bullet = InstantiateBullet(Quaternion.Euler(0, i, 0));
+        //        bullet.transform.position = pos;
+        //        bullet.isStop = true;
+        //        bullet.SetSpriteColor(Color.green);
+        //    }
+        //    radius += 3;
+        //    yield return new WaitForSeconds(0.02f);
+        //}
+
+        repeatCount = 7;
+        for (int i = 0; i < (360 / repeatCount) * 5; i++)
+        {
+            for (int j = 0; j < 360; j += 360 / repeatCount)
+            {
+                var rot = j + dir;
+                Bullet bullet1 = InstantiateBullet(Quaternion.Euler(0, rot, 0));
+                Bullet bullet2 = InstantiateBullet(Quaternion.Euler(0, -rot, 0));
+                bullet1.SetSpriteColor(Color.green);
+                bullet2.SetSpriteColor(Color.green);
+                bullet1.speed = 40f;
+                bullet2.speed = 40f;
+            }
+            dir += 2f;
+            yield return new WaitForSeconds(0.15f);
+        }
+
+
         yield break;
     }
 }
