@@ -24,8 +24,9 @@ public class GameManager : Singleton<GameManager>
         curStagetNum++;
         qusetComplete = false;
         curStageBoss = null;
-
         SetQuset();
+
+
     }
 
     private void SetQuset()
@@ -39,15 +40,12 @@ public class GameManager : Singleton<GameManager>
         };
         qusetCondtion = conditon;
     }
-
     public void AddScore(int score) => stageScore += score;
     public void PlayerActivationChanage()
     {
         PlayerController.Instance.enabled = !PlayerController.Instance.enabled;
         PlayerSkillSystem.Instance.enabled = !PlayerSkillSystem.Instance.enabled;
     }
-
-    
 
     private void Update()
     {

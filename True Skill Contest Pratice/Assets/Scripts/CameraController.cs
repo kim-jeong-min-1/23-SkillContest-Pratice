@@ -1,6 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class CameraController : MonoBehaviour
     void Awake()
     {
         if (!mainCamera) mainCamera = Camera.main;
-        if (!target) target = FindObjectOfType<PlayerController>().gameObject;
+        if (!target) target = FindObjectOfType<PlayerController>().gameObject;  
     }
 
     void FixedUpdate()
@@ -22,7 +23,7 @@ public class CameraController : MonoBehaviour
 
         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPosition, cameraSpeed * Time.deltaTime);
 
-        mainCamera.transform.position = 
+        mainCamera.transform.position =
             new Vector3(Mathf.Clamp(mainCamera.transform.position.x, -Utils.moveLimit.x + 58f, Utils.moveLimit.x - 58f),
             mainCamera.transform.position.y, Mathf.Clamp(mainCamera.transform.position.z, -Utils.moveLimit.y + 2f, Utils.moveLimit.y - 40f));
     }
