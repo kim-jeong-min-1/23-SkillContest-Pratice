@@ -18,11 +18,12 @@ public class MetoerSpawner : MonoBehaviour
     {
         while (!GameManager.Instance.qusetComplete)
         {
+            yield return new WaitForSeconds(Random.Range(minDelay, maxDelay));
+
             Vector3 spawnPos = new Vector3(Random.Range(-Utils.spawnLimit.x, Utils.spawnLimit.x), 0f, Utils.spawnLimit.y);
             Meteor meteor = Instantiate(metoer, spawnPos, Quaternion.identity, meteorGroup);
             MeteorSubject.Instance.AddMeteor(meteor);
 
-            yield return new WaitForSeconds(Random.Range(minDelay, maxDelay));
         }
     }
 }

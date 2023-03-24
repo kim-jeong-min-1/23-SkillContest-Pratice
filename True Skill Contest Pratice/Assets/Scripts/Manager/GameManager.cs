@@ -9,6 +9,8 @@ public class GameManager : Singleton<GameManager>
     public int qusetCondtion { get; private set; } = 0;
     public bool qusetComplete { get; set; } = false;
     public Boss curStageBoss { get; set; } = null;
+    public GameObject playerObject { get; set; } = null;
+
 
     [SerializeField] private List<Boss> bossPrefabs;
 
@@ -24,6 +26,7 @@ public class GameManager : Singleton<GameManager>
         curStagetNum++;
         qusetComplete = false;
         curStageBoss = null;
+        playerObject = FindObjectOfType<PlayerController>().gameObject;
         SetQuset();
 
 
@@ -41,10 +44,12 @@ public class GameManager : Singleton<GameManager>
         qusetCondtion = conditon;
     }
     public void AddScore(int score) => stageScore += score;
-    public void PlayerActivationChanage()
+    public void DirectorSetChanage()
     {
         PlayerController.Instance.enabled = !PlayerController.Instance.enabled;
         PlayerSkillSystem.Instance.enabled = !PlayerSkillSystem.Instance.enabled;
+        if (curStageBoss) curStageBoss.enabled = !curStageBoss.enabled;
+        Time.timeScale = (Time.timeScale == 0) ? 1 : 0;
     }
 
     private void Update()

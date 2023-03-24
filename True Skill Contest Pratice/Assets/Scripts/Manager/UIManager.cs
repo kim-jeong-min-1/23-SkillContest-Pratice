@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
+    [SerializeField] private GameObject interfaceUIGroup;
     [Space(20f)]
     [SerializeField] private Image playerHitUI;
     [SerializeField] private Image targetSightUI;
@@ -194,6 +195,8 @@ public class UIManager : Singleton<UIManager>
             }
         }
     }
+
+    public void InterfaceEnable(bool enable) => interfaceUIGroup.SetActive(enable);
 
     private IEnumerator UIMovement(Image UI, Vector3 start, Vector3 end, float time)
     {
