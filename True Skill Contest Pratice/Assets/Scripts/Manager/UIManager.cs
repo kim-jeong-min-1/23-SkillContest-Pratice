@@ -21,18 +21,61 @@ public class UIManager : Singleton<UIManager>
 
     [Space(20f)]
     [SerializeField] private GameObject skillSelectUIGroup;
-    [SerializeField] public List<SelectUI> selectUIs;
+    [SerializeField] private List<SelectUI> selectUIs;
+
+    [SerializeField] private RectTransform stageClearUI;
+    [SerializeField] private StageClearUI StageClearUI;
 
     private void Awake() => SetInstance();
 
-    private void Start()
+    public void SetStageClearUI(int score, System.Action action)
     {
-        SetUI();
+        StageClearUI.scoreText.text = $"Score : {score}";
+
+        var time = Time.unscaledTime;
+        var m = (int)time / 60;
+        var s = (int)time % 60;
+
+        StageClearUI.timeText.text = $"Time : {m}m {s}s";
+        StageClearUI.nextbtn.onClick.AddListener(action.Invoke);
     }
-
-    private void SetUI()
+    public void StageClearUIOn(float time)
     {
+        StartCoroutine(StageClearUIOn(time));
+        IEnumerator StageClearUIOn(float time)
+        {
+            float current = 0;
+            float percent = 0;
+            var start = new Vector3(0, -1000f, 0);
 
+            while (percent < 1)
+            {
+                current += Time.unscaledDeltaTime;
+                percent = current / time;
+                
+                stageClearUI.anchoredPosition = Vector3.Lerp(start, new Vector3(0, 20, 0), percent);
+                yield return null; 
+            }
+        }
+    }
+    public void StageClearUIOff(float time)
+    {
+        StartCoroutine(StageClearUIOn(time));
+        IEnumerator StageClearUIOn(float time)
+        {
+            float current = 0;
+            float percent = 0;
+            var start = new Vector3(0, 20f, 0);
+
+            while (percent < 1)
+            {
+                current += Time.unscaledDeltaTime;
+                percent = current / time;
+
+                stageClearUI.anchoredPosition = Vector3.Lerp(start, new Vector3(0, -1000, 0), percent);
+                yield return null;
+            }
+        }
     }
 
     public void SetSelectUI(int index, Skill skill)
@@ -197,7 +240,6 @@ public class UIManager : Singleton<UIManager>
     }
 
     public void InterfaceEnable(bool enable) => interfaceUIGroup.SetActive(enable);
-
     private IEnumerator UIMovement(Image UI, Vector3 start, Vector3 end, float time)
     {
         float current = 0;
@@ -223,4 +265,12 @@ public struct SelectUI
     public Text nameText;
     public Text levelText;
     public Text explainText;
+}
+
+[System.Serializable]
+public struct StageClearUI
+{
+    public Text scoreText;
+    public Text timeText;
+    public Button nextbtn;
 }

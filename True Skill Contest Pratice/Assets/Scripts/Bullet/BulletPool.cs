@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletPool : Singleton<BulletPool>
+public class BulletPool : DestroySingleton<BulletPool>
 {
     private Queue<Bullet> playerBullets;
     private Queue<Bullet> enemyBullets;
@@ -20,7 +20,8 @@ public class BulletPool : Singleton<BulletPool>
     private void SetVariable()
     {
         playerBullets = new Queue<Bullet>();
-        enemyBullets = new Queue<Bullet>(); 
+        enemyBullets = new Queue<Bullet>();
+        if (!bulletGroup) bulletGroup = new GameObject("BulletGroup").transform;
     }
 
     public Bullet GetPlayerBullet()

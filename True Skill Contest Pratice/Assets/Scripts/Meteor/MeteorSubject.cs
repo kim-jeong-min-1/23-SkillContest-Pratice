@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeteorSubject : Singleton<MeteorSubject>
+public class MeteorSubject : DestroySingleton<MeteorSubject>
 {
     [SerializeField] private ParticleSystem destroyEffect;
     private List<Meteor> meteors;

@@ -95,7 +95,7 @@ public class Boss2 : Boss
     private IEnumerator Pattern3()
     {
         repeatCount = 40;
-        float radius = 3;
+        //loat radius = 3;
         float dir = 0;
         Vector3 center = transform.position;
 

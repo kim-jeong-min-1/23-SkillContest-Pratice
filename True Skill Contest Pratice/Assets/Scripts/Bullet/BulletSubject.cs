@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BulletSubject : Singleton<BulletSubject>
+public class BulletSubject : DestroySingleton<BulletSubject>
 {
     private List<Bullet> bullets;
     private List<Bullet> destroyBullets;
@@ -70,5 +70,10 @@ public class BulletSubject : Singleton<BulletSubject>
                 bullet.type = BulletType.ChangePlayer;
             }
         }
+    }
+
+    public void DestroyAllBullet()
+    {
+        bullets.Clear();
     }
 }

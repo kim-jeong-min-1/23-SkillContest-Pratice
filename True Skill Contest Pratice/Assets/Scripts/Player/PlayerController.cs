@@ -41,7 +41,10 @@ public partial class PlayerController : Singleton<PlayerController>
         {
             playerHp = value;
             if (playerHp > playerMaxHp) playerHp = playerMaxHp;
-            if (playerHp < 0) playerHp = 0;
+            if (playerHp < 0)
+            {
+                playerHp = 0;
+            }
 
             hpBar.fillAmount = playerHp / playerMaxHp;
         }
@@ -53,8 +56,10 @@ public partial class PlayerController : Singleton<PlayerController>
         {
             playerFuel = value;
             if (playerFuel > playerMaxFuel) playerFuel = playerMaxFuel;
-            if (playerFuel < 0) playerFuel = 0;
-
+            if (playerFuel < 0)
+            {
+                playerFuel = 0;
+            }
             fuelBar.fillAmount = playerFuel / playerMaxFuel;
         }
     }

@@ -44,7 +44,7 @@ public class PlayerSkillSystem : Singleton<PlayerSkillSystem>
             PlayerController.Instance.enabled = false;
             Time.timeScale = 0.3f;
             int index = 0;
-            int count = UIManager.Instance.selectUIs.Count;
+            int count = 3;
             List<Skill> skills = new List<Skill>();
 
             for (int i = 0; i < count; i++)
@@ -80,7 +80,7 @@ public class PlayerSkillSystem : Singleton<PlayerSkillSystem>
                 playerSkills.Add(skills[index]);
             }
             else if (existingSkill.level < maxPlayerSkillLevel) existingSkill.level++;
-            //점수 추가
+            else GameManager.Instance.AddScore(existingSkill.level * 20);
 
             //액티브 스킬은 바로 사용
             if (skills[index].isAcive) skills[index].UseSkill();

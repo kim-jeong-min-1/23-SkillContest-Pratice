@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
-    public int curStagetNum { get; private set; } = 0;
+    public int curStageNum { get; private set; } = 0;
     public int stageScore { get; private set; }
     public int qusetCondtion { get; private set; } = 0;
+
     public bool qusetComplete { get; set; } = false;
+    public bool isCurStageClear { get; set; } = false;
+
     public Boss curStageBoss { get; set; } = null;
     public GameObject playerObject { get; set; } = null;
 
-
+    private GameDirector gameDirector;
     [SerializeField] private List<Boss> bossPrefabs;
+    [SerializeField] private List<string> stageNames;
 
     private void Awake()
     {
@@ -22,29 +27,50 @@ public class GameManager : Singleton<GameManager>
 
     private void SetGameManager()
     {
-        EnemySubject.Instance.enemyCount = 0;
-        curStagetNum++;
+        curStageNum++;
+
         qusetComplete = false;
+        isCurStageClear = false;
         curStageBoss = null;
+
         playerObject = FindObjectOfType<PlayerController>().gameObject;
+        gameDirector = FindObjectOfType<GameDirector>();
         SetQuset();
 
-
+        gameDirector.StageStart(playerObject.transform, stageNames[curStageNum - 1]);
     }
 
     private void SetQuset()
     {
-        int conditon = curStagetNum switch
+        int conditon = curStageNum switch
         {
-            1 => 100,
-            2 => 150,
+            1 => 10,
+            2 => 10,
             3 => 200,
             _ => 0
         };
         qusetCondtion = conditon;
     }
     public void AddScore(int score) => stageScore += score;
-    public void DirectorSetChanage()
+
+    private void NextStage()
+    {
+        AsyncOperation op = SceneManager.LoadSceneAsync(curStageNum + 1);
+        op.allowSceneActivation = true;
+
+        while (!op.isDone)
+        {
+            if (op.isDone)
+            {
+                SetGameManager();
+                break;
+            }
+        }
+
+        SetGameManager();
+    }
+
+    public void GameStopOnOff()
     {
         PlayerController.Instance.enabled = !PlayerController.Instance.enabled;
         PlayerSkillSystem.Instance.enabled = !PlayerSkillSystem.Instance.enabled;
@@ -59,12 +85,26 @@ public class GameManager : Singleton<GameManager>
 
         if (EnemySubject.Instance.enemyCount == qusetCondtion) qusetComplete = true;
 
-        if (qusetComplete && curStageBoss == null)
+        if (curStageBoss == null)
         {
-            curStageBoss
-            = Instantiate(bossPrefabs[curStagetNum - 1], new Vector3(0, 0, 100f), Quaternion.identity);
+            if (qusetComplete)
+            {
+                curStageBoss
+                = Instantiate(bossPrefabs[curStageNum - 1], new Vector3(0, 0, 100f), Quaternion.identity);
+                gameDirector.BossAppearance(curStageBoss.transform);
+            }
         }
-
+        else
+        {
+            if (curStageBoss.isDie && !isCurStageClear)
+            {
+                // 스테이지 클리어 처리
+                isCurStageClear = true;
+                GameStopOnOff();
+                UIManager.Instance.SetStageClearUI(stageScore, NextStage);
+                UIManager.Instance.StageClearUIOn(1f);
+            }
+        }
     }
 }
 

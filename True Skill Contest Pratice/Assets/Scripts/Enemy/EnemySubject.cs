@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySubject : Singleton<EnemySubject>
+public class EnemySubject : DestroySingleton<EnemySubject>
 {
     [SerializeField] private ParticleSystem enemyDieEffect;
     private List<Enemy> curEnemies;
@@ -64,7 +64,7 @@ public class EnemySubject : Singleton<EnemySubject>
         GameManager.Instance.AddScore(score);
 
         var randProb = Random.Range(1, 21);
-        if (randProb == 1) PlayerSkillSystem.Instance.SelectSkill();
+        if (randProb <= 2) PlayerSkillSystem.Instance.SelectSkill();
     }
 
     public Transform NearToTargetEnemy(Vector3 target)
