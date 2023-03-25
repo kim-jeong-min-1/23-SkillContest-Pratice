@@ -23,23 +23,26 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject skillSelectUIGroup;
     [SerializeField] private List<SelectUI> selectUIs;
 
-    [SerializeField] private RectTransform stageClearUI;
-    [SerializeField] private StageClearUI StageClearUI;
+    [SerializeField] public InputField inputField;
+    [SerializeField] private RectTransform stageUI;
+    [SerializeField] private StageUI StageUI;
 
     private void Awake() => SetInstance();
 
-    public void SetStageClearUI(int score, System.Action action)
+    public void SetStageUI(string text, int score, System.Action action)
     {
-        StageClearUI.scoreText.text = $"Score : {score}";
+        StageUI.mainText.text = text;
+        StageUI.scoreText.text = $"Score : {score}";
 
         var time = Time.unscaledTime;
         var m = (int)time / 60;
         var s = (int)time % 60;
+        StageUI.timeText.text = $"Time : {m}m {s}s";
 
-        StageClearUI.timeText.text = $"Time : {m}m {s}s";
-        StageClearUI.nextbtn.onClick.AddListener(action.Invoke);
+        StageUI.nextbtn.onClick.RemoveAllListeners();
+        StageUI.nextbtn.onClick.AddListener(() => action());
     }
-    public void StageClearUIOn(float time)
+    public void StageUIOn(float time)
     {
         StartCoroutine(StageClearUIOn(time));
         IEnumerator StageClearUIOn(float time)
@@ -50,15 +53,15 @@ public class UIManager : Singleton<UIManager>
 
             while (percent < 1)
             {
-                current += Time.unscaledDeltaTime;
+                current += Time.deltaTime;
                 percent = current / time;
-                
-                stageClearUI.anchoredPosition = Vector3.Lerp(start, new Vector3(0, 20, 0), percent);
-                yield return null; 
+
+                stageUI.anchoredPosition = Vector3.Lerp(start, new Vector3(0, 20, 0), percent);
+                yield return null;
             }
         }
     }
-    public void StageClearUIOff(float time)
+    public void StageUIOff(float time)
     {
         StartCoroutine(StageClearUIOn(time));
         IEnumerator StageClearUIOn(float time)
@@ -69,13 +72,21 @@ public class UIManager : Singleton<UIManager>
 
             while (percent < 1)
             {
-                current += Time.unscaledDeltaTime;
+                current += Time.deltaTime;
                 percent = current / time;
 
-                stageClearUI.anchoredPosition = Vector3.Lerp(start, new Vector3(0, -1000, 0), percent);
+                stageUI.anchoredPosition = Vector3.Lerp(start, new Vector3(0, -1000, 0), percent);
                 yield return null;
             }
         }
+    }
+    public void OnInputField()
+    {
+        inputField.gameObject.SetActive(true);
+
+        StageUI.timeText.gameObject.SetActive(false);
+        StageUI.scoreText.gameObject.SetActive(false);
+        StageUI.nextbtn.gameObject.SetActive(false);
     }
 
     public void SetSelectUI(int index, Skill skill)
@@ -107,7 +118,7 @@ public class UIManager : Singleton<UIManager>
                 yield return null;
             }
         }
-        
+
     }
     public void SkillSelectOn()
     {
@@ -268,8 +279,9 @@ public struct SelectUI
 }
 
 [System.Serializable]
-public struct StageClearUI
+public struct StageUI
 {
+    public Text mainText;
     public Text scoreText;
     public Text timeText;
     public Button nextbtn;

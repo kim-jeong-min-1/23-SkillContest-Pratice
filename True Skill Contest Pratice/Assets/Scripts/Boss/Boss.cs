@@ -7,7 +7,7 @@ public abstract class Boss : MonoBehaviour
 {
     [SerializeField] protected float bossHp;
     [SerializeField] protected float bossSpeed;
-    [SerializeField] private float score;
+    [SerializeField] private int score;
 
     [SerializeField] private Image bossHpImage;
     [SerializeField] private SpriteRenderer sprite;
@@ -18,7 +18,7 @@ public abstract class Boss : MonoBehaviour
     protected Transform player;
     protected Coroutine bossPattern;
 
-    public bool isDie { get; private set; }
+    public bool isDie { get; private set; } = false;
 
     protected virtual void SetBoss()
     {
@@ -29,9 +29,8 @@ public abstract class Boss : MonoBehaviour
         shooter = GetComponent<BulletShooter>();
 
         this.bossHp = bossStat.hp;
-        this.maxBossHp = bossStat.hp;
         this.bossSpeed = bossStat.speed;
-        this.score = bossStat.score;
+        this.score = bossStat.score;     
     }
 
     protected virtual void Awake() => SetBoss();
@@ -97,12 +96,20 @@ public abstract class Boss : MonoBehaviour
         if (bossHp - damage <= 0)
         {
             isDie = true;
+            GameManager.Instance.AddScore(score);
         }
         bossHp -= damage;
         bossHpImage.fillAmount = bossHp / maxBossHp;
 
         StartCoroutine(HitEffect());
     }
+
+    public void HpMult(float mult)
+    {
+        bossHp *= mult;
+        this.maxBossHp = bossHp;
+    }
+
     protected virtual void OnTriggerEnter(Collider other)
     {
         var bullet = other.GetComponent<Bullet>();
@@ -119,7 +126,7 @@ public class BossStat
 {
     public float hp;
     public float speed;
-    public float score;
+    public int score;
 
     public BossStat()
     {

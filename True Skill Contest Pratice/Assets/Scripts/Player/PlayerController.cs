@@ -30,9 +30,11 @@ public partial class PlayerController : Singleton<PlayerController>
     private float shotCurTime = 0f;
     private float hitCurTime = 0f;
     private float playerHitDelayTime = 1f;
-    private bool isInvis = false;
     private Quaternion targetDir;
     private Transform target;
+
+    private bool isInvis = false;
+    public bool isDie = false;
 
     public float Hp
     {
@@ -41,9 +43,10 @@ public partial class PlayerController : Singleton<PlayerController>
         {
             playerHp = value;
             if (playerHp > playerMaxHp) playerHp = playerMaxHp;
-            if (playerHp < 0)
+            if (playerHp <= 0)
             {
                 playerHp = 0;
+                if (!isDie) PlayerDie();
             }
 
             hpBar.fillAmount = playerHp / playerMaxHp;
@@ -56,9 +59,10 @@ public partial class PlayerController : Singleton<PlayerController>
         {
             playerFuel = value;
             if (playerFuel > playerMaxFuel) playerFuel = playerMaxFuel;
-            if (playerFuel < 0)
+            if (playerFuel <= 0)
             {
                 playerFuel = 0;
+                if(!isDie) PlayerDie();
             }
             fuelBar.fillAmount = playerFuel / playerMaxFuel;
         }
@@ -207,6 +211,19 @@ public partial class PlayerController : Singleton<PlayerController>
             }
             rayzer.SetActive(false);
         }
+    }
+    public void PlayerReset()
+    {
+        transform.position = new Vector3(0, 0, -50);
+        model.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        rayzer.SetActive(false);
+        shield.SetActive(false);
+        StopAllCoroutines();
+    }
+    public void PlayerDie()
+    {
+        isDie = true;
+        GameManager.Instance.GameOver();
     }
 
     private void OnTriggerEnter(Collider other)

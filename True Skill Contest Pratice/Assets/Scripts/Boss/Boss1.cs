@@ -14,9 +14,8 @@ public class Boss1 : Boss
 
     Color[] spriteColors = new Color[2] { Color.red, Color.yellow };
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
         bossPattern = StartCoroutine(BossAI_Update());
     }
 

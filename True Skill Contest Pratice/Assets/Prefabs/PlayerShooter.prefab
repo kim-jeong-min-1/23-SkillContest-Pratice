@@ -45,6 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  speed: 120
+  speed: 140
   damage: 25
-  cool: 0.15
+  cool: 0.2

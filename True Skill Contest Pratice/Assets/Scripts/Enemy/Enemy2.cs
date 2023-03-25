@@ -7,12 +7,6 @@ public class Enemy2 : Enemy
     int repeatCount = 0;
     Color spriteColor = Color.red;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        StartCoroutine(EnemyAI_Update());
-    }
-
     protected override IEnumerator EnemyAI_Update()
     {
         yield return StartCoroutine(MoveToPlayerPosition(Random.Range(-30, 30), 33, 1.25f));

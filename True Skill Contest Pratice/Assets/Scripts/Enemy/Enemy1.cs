@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class Enemy1 : Enemy
 {
-    protected void Start()
-    {
-        StartCoroutine(EnemyAI_Update());
-    }
-
     protected override IEnumerator EnemyAI_Update()
     {
         StartCoroutine(Enemy1_Shooter());

@@ -12,6 +12,8 @@ public class PlayerSkillSystem : Singleton<PlayerSkillSystem>
 
     private bool activeSkill_1On;
     private bool activeSkill_2On;
+    private Coroutine activeSkill_1Coroutine;
+    private Coroutine activeSkill_2Coroutine;
 
     private List<Skill> playerSkills;
 
@@ -153,7 +155,7 @@ public class PlayerSkillSystem : Singleton<PlayerSkillSystem>
             activeSkill_1On = false;
 
             yield return
-                StartCoroutine(ActiveSkillTimer(activeSkill_1CoolTime, UIManager.Instance.Skill1_UIUpdate));
+                activeSkill_1Coroutine = StartCoroutine(ActiveSkillTimer(activeSkill_1CoolTime, UIManager.Instance.Skill1_UIUpdate));
 
             activeSkill_1On = true;
             yield break;
@@ -170,7 +172,7 @@ public class PlayerSkillSystem : Singleton<PlayerSkillSystem>
             activeSkill_2On = false;
 
             yield return
-                StartCoroutine(ActiveSkillTimer(activeSkill_2CoolTime, UIManager.Instance.Skill2_UIUpdate));
+                activeSkill_2Coroutine = StartCoroutine(ActiveSkillTimer(activeSkill_2CoolTime, UIManager.Instance.Skill2_UIUpdate));
 
             activeSkill_2On = true;
             yield break;
@@ -188,5 +190,13 @@ public class PlayerSkillSystem : Singleton<PlayerSkillSystem>
             yield return new WaitForFixedUpdate();
         }
         yield break;
+    }
+
+    public void SkillCoolTimeInit()
+    {
+        activeSkill_1On = true;
+        activeSkill_2On = true;
+        StopCoroutine(activeSkill_1Coroutine);
+        StopCoroutine(activeSkill_2Coroutine);
     }
 }

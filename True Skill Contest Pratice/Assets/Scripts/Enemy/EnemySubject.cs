@@ -63,8 +63,18 @@ public class EnemySubject : DestroySingleton<EnemySubject>
         Instantiate(enemyDieEffect, pos, Quaternion.identity);
         GameManager.Instance.AddScore(score);
 
-        var randProb = Random.Range(1, 21);
-        if (randProb <= 2) PlayerSkillSystem.Instance.SelectSkill();
+        var randProb = Random.Range(1, 11);
+        if (randProb == 1) PlayerSkillSystem.Instance.SelectSkill();
+    }
+
+    public void DieAllEnemy()
+    {
+        foreach(var enemy in curEnemies)
+        {
+            Destroy(enemy.gameObject);
+            curEnemies.Remove(enemy);
+        }
+        dieEnemies.Clear();
     }
 
     public Transform NearToTargetEnemy(Vector3 target)

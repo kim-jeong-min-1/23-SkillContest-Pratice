@@ -29,12 +29,16 @@ public abstract class Enemy : MonoBehaviour
         shooter = GetComponent<BulletShooter>();     
 
         this.enemyHp = enemyStat.hp;
-        this.maxEnemyHp = enemyStat.hp;
         this.enemySpeed = enemyStat.speed;
-        this.score = enemyStat.score;
+        this.score = enemyStat.score;      
     }
 
     protected virtual void Awake() => SetEnemy();
+    protected virtual void Start()
+    {
+        HpMult(GameManager.Instance.curStageNum);
+        StartCoroutine(EnemyAI_Update());
+    }
     protected abstract IEnumerator EnemyAI_Update();
     
     protected void EnemyMovement()
@@ -106,6 +110,13 @@ public abstract class Enemy : MonoBehaviour
         enemyHpImage.fillAmount = enemyHp / maxEnemyHp;
         StartCoroutine(HitEffect());
     }
+
+    private void HpMult(float mult)
+    {
+        enemyHp *= mult;
+        this.maxEnemyHp = enemyStat.hp;
+    }
+
     protected virtual void OnTriggerEnter(Collider other)
     {
         var bullet = other.GetComponent<Bullet>();
@@ -126,7 +137,7 @@ public class EnemyStat
 
     public EnemyStat() 
     {
-        hp = 100f;
+        hp = 50f;
         speed = 40f;
         score = 50;
     }

@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.WSA;
+using System.Collections.Generic;
 
 public class GameDirector : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class GameDirector : MonoBehaviour
     [SerializeField] private Text directText;
     [SerializeField] private Image fade;
     [SerializeField] private GameObject latterBox;
+    [SerializeField] private GameObject explosion;
 
     public void StageStart(Transform playerObj, string stageName)
     {
@@ -61,9 +64,65 @@ public class GameDirector : MonoBehaviour
             yield return new WaitForSecondsRealtime(1);
             yield return StartCoroutine(FadeIn(0.8f));
 
+            latterBox.SetActive(false);
             directorCamera.gameObject.SetActive(false);
             UIManager.Instance.InterfaceEnable(true);
             GameManager.Instance.GameStopOnOff();
+        }
+    }
+    public void BossDie(Transform bossObj)
+    {
+        StartCoroutine (BossDie(bossObj));
+        IEnumerator BossDie(Transform bossObj)
+        {
+            yield return StartCoroutine(FadeOut(0.01f));
+            GameManager.Instance.GameStopOnOff();
+            UIManager.Instance.InterfaceEnable(false);
+            directorCamera.gameObject.SetActive(true);
+            latterBox.SetActive(true);
+
+            var movepos = (bossObj.position + directCamOffset);
+            StartCoroutine(CameraMove(movepos, 2.5f));
+            yield return StartCoroutine(CameraZoom(45f, 2.5f));
+
+            for (int i = 0; i < 8; i++)
+            {
+                yield return new WaitForSecondsRealtime(0.25f);
+                var nx = Random.Range(-12, 12); var nz = Random.Range(-12, 12);
+                var pos = bossObj.position + new Vector3(nx, 0, nz);
+                Instantiate(explosion, pos, Quaternion.identity);
+            }
+            Destroy(bossObj.gameObject);
+
+            GameManager.Instance.GameStopOnOff();
+            UIManager.Instance.InterfaceEnable(true);
+            directorCamera.gameObject.SetActive(false);
+            latterBox.SetActive(true);
+        }
+    }
+    public void PlayerDie(Transform playerObj)
+    {
+        StartCoroutine(PlayerDie());
+        IEnumerator PlayerDie()
+        {
+            GameManager.Instance.GameStopOnOff();
+            yield return StartCoroutine(CameraZoom(60f, 0.01f));
+            yield return StartCoroutine(FadeOut(0.01f));
+
+            var movepos = playerObj.position + new Vector3(0, 50f, -18f);
+            StartCoroutine(CameraMove(movepos, 2.5f));
+
+            directorCamera.gameObject.SetActive(true);
+            yield return StartCoroutine(CameraZoom(30f, 2.5f));
+
+            for (int i = 0; i < 8; i++)
+            {
+                yield return new WaitForSecondsRealtime(0.08f);
+                var nx = Random.Range(-1.5f, 1.5f); var nz = Random.Range(-1.5f, 1.5f);
+                var pos = playerObj.position + new Vector3(nx, 0, nz);
+                Instantiate(explosion, pos, Quaternion.identity);
+            }
+            GameManager.Instance.GameStopOnOff(true);
         }
     }
 
