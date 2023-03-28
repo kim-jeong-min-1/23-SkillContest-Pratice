@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
-using UnityEditor.Animations;
 
 public class TitleManager : MonoBehaviour
 {

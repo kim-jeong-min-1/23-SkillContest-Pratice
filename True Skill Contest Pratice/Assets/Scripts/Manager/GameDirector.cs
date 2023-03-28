@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
-using UnityEngine.WSA;
 using System.Collections.Generic;
 
 public class GameDirector : MonoBehaviour
