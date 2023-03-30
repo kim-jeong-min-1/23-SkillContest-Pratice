@@ -20,10 +20,16 @@ public partial class PlayerController : Singleton<PlayerController>
     private float playerFuel;
     private float playerSpeed;
 
-    private float shotWaitTime = 0.2f;
     private float shotCurTime = 0;
-    private float hitWaitTime = 1f;
     private float hitCurTime = 0;
+    private float skill_1CurTime = 0;
+    private float skill_2CurTime = 0;
+
+    private readonly float shotWaitTime = 0.2f;
+    private readonly float hitWaitTime = 1f;
+    private readonly float playerSkill_1Cool = 8f;
+    private readonly float playerSkill_2Cool = 15f;
+
     private Quaternion targetDir;
 
     public float HP
@@ -57,6 +63,7 @@ public partial class PlayerController : Singleton<PlayerController>
         JsonLoader.Save(n, "Player_Stat");
         playerStat = JsonLoader.Load<PlayerStat>("Player_Stat");
         playerInput = GetComponent<PlayerInput>();
+        playerSkill = GetComponent<PlayerSkillSystem>();
 
         playerHp = playerStat.hp;
         playerFuel = playerStat.fuel;
@@ -83,6 +90,7 @@ public partial class PlayerController : Singleton<PlayerController>
     {
         FindTarget();
         PlayerShot();
+        PlayerSkill();
         SetDelta();
     }
     private void PlayerMovement()
@@ -103,7 +111,6 @@ public partial class PlayerController : Singleton<PlayerController>
             playerModel.rotation = Quaternion.Slerp(playerModel.rotation, targetDir, 0.2f);
         }
     }
-
     private void FindTarget()
     {
         target = EnemySubject.Instance.NearToTargetEnemy(transform.position);
@@ -126,10 +133,39 @@ public partial class PlayerController : Singleton<PlayerController>
             else Shot(targetDir);
         }
     }
+    private void PlayerSkill()
+    {
+        UIManager.Instance.Skill_1Update(skill_1CurTime / playerSkill_1Cool);
+        UIManager.Instance.Skill_2Update(skill_2CurTime / playerSkill_2Cool);
+
+        if (playerInput.playerSkill1)
+        {
+            if(skill_1CurTime >= playerSkill_1Cool)
+            {
+                skill_1CurTime = 0;
+                BulletSubject.Instance.EnemyBulletReflect();
+                UIManager.Instance.FlahsEffect(1f);
+                return;
+            }
+            UIManager.Instance.SkillBlock();
+        }
+        else if (playerInput.playerSkill2)
+        {
+            if(skill_2CurTime >= playerSkill_2Cool)
+            {
+                skill_2CurTime = 0;
+                HP += 25;
+                return;
+            }
+            UIManager.Instance.SkillBlock();
+        }
+    }
     private void SetDelta()
     {
         shotCurTime += Time.deltaTime;
         hitCurTime += Time.deltaTime;
+        skill_1CurTime += Time.deltaTime;
+        skill_2CurTime += Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)

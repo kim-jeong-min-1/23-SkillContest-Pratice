@@ -51,4 +51,18 @@ public class BulletSubject : DestroySingleton<BulletSubject>
         }
         destroyBullets.Clear();
     }
+
+    public void EnemyBulletReflect()
+    {
+        foreach (var bullet in bullets)
+        {
+            if(bullet.type == BulletType.Enemy)
+            {
+                bullet.Reflection();
+                bullet.ChangeType(EntityType.Player);
+                bullet.ChangeColor(Color.cyan);
+                bullet.damage = bullet.damage / 5;
+            }
+        }
+    }
 }

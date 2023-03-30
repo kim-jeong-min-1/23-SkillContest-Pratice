@@ -38,6 +38,12 @@ public class Bullet : MonoBehaviour
         sprite.color = color;
     }
 
+    public void Reflection()
+    {
+        var reflect = transform.eulerAngles + new Vector3(0, 180f, 0);
+        transform.rotation = Quaternion.Euler(reflect);
+    }
+
     public void BulletMovement()
     {
         transform.Translate(new Vector3(0, 0, speed * Time.deltaTime));

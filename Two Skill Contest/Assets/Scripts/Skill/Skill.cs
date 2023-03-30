@@ -2,17 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Skill : MonoBehaviour
+public enum SkillType
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    HpUP,
+    FuelUP,
+    Invicible,
+    Rayzer,
+    Circle,
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
+
+public abstract class Skill : MonoBehaviour
+{
+    public int level { get; set; }
+
+    public float coolTime;
+    public float curTime;
+    public string skillName;
+    public string explain;
+
+    public abstract void UseSkill();
+}
+
+
