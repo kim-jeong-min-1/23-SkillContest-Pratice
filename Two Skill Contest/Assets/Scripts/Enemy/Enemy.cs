@@ -6,19 +6,18 @@ using UnityEngine.UI;
 
 public abstract class Enemy : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private Image enemyHpBar;
+    [SerializeField] private SpriteRenderer sprite;
 
     [SerializeField] protected float enemySpeed;
     [SerializeField] protected float enemyHp;
-    [SerializeField] protected int enemyScore;
+    private float enemyMaxHp;
 
     private EnemyStat enemyStat;
     private BulletShooter enemyShooter;
     private Transform player;
-    private float enemyMaxHp;
+    public int enemyScore { get; private set; }
 
-    public bool isDie { get; private set; }
     public float HP
     {
         get => enemyHp;
@@ -33,6 +32,7 @@ public abstract class Enemy : MonoBehaviour
             }
         }
     }
+    public bool isDie { get; private set; } = false;
 
 
     private void Awake() => SetEnemy();
@@ -132,7 +132,7 @@ public class EnemyStat
     public EnemyStat()
     {
         hp = 50;
-        speed = 8;
+        speed = 15;
         score = 50;
     }
 }

@@ -31,7 +31,7 @@ public partial class PlayerController
 
         if (ShooterLevel == 1)
         {
-            AddShooter(Vector3.forward * 1.5f);
+            AddShooter(Vector3.zero);
         }
         else if (shooterLevel == 2)
         {

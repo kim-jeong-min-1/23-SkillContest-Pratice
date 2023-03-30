@@ -6,18 +6,25 @@ using UnityEngine.UI;
 public partial class PlayerController : Singleton<PlayerController>
 {
     private PlayerInput playerInput;
+    private PlayerSkillSystem playerSkill;
     [SerializeField] private PlayerStat playerStat;
 
     [SerializeField] private Image playerHpBar;
     [SerializeField] private Image playerFuelBar;
-    [SerializeField] private float shotWaitTime = 0.2f;
+    [SerializeField] private Transform playerModel;
+    private Transform target;
 
     private float playerMaxHp;
     private float playerHp;
     private float playerMaxFuel;
     private float playerFuel;
     private float playerSpeed;
+
+    private float shotWaitTime = 0.2f;
     private float shotCurTime = 0;
+    private float hitWaitTime = 1f;
+    private float hitCurTime = 0;
+    private Quaternion targetDir;
 
     public float HP
     {
@@ -25,15 +32,22 @@ public partial class PlayerController : Singleton<PlayerController>
         set
         {
             playerHp = value;
+            if (playerHp < 0) playerHp = 0;
+            else if (playerHp > playerMaxHp) playerHp = playerMaxHp;
+
+            playerHpBar.fillAmount = playerHp / playerMaxHp;
         }
     }
-
     public float Fuel
     {
         get => playerFuel;
         set
         {
             playerFuel = value;
+            if (playerFuel < 0) playerFuel = 0;
+            else if (playerFuel > playerMaxFuel) playerFuel = playerMaxFuel;
+
+            playerFuelBar.fillAmount = playerFuel / playerMaxFuel;
         }
     }
 
@@ -51,7 +65,7 @@ public partial class PlayerController : Singleton<PlayerController>
         playerMaxHp = playerHp;
         playerMaxFuel = playerFuel;
 
-        ShooterLevel++;    
+        ShooterLevel++;
     }
 
     private void Awake()
@@ -63,14 +77,14 @@ public partial class PlayerController : Singleton<PlayerController>
     private void FixedUpdate()
     {
         PlayerMovement();
+        PlayerRotation();
     }
-    
     private void Update()
     {
+        FindTarget();
         PlayerShot();
-        SetDelta();       
+        SetDelta();
     }
-
     private void PlayerMovement()
     {
         transform.position += playerInput.moveInput * playerSpeed * Time.deltaTime;
@@ -78,19 +92,60 @@ public partial class PlayerController : Singleton<PlayerController>
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -Utils.moveLimit.x, Utils.moveLimit.x),
             0f, Mathf.Clamp(transform.position.z, -Utils.moveLimit.y, Utils.moveLimit.y));
     }
+    private void PlayerRotation()
+    {
+        if(target == null)
+        {
+            playerModel.rotation = Quaternion.Slerp(playerModel.rotation, Quaternion.Euler(0, 0, 0), 0.2f);
+        }
+        else
+        {
+            playerModel.rotation = Quaternion.Slerp(playerModel.rotation, targetDir, 0.2f);
+        }
+    }
 
+    private void FindTarget()
+    {
+        target = EnemySubject.Instance.NearToTargetEnemy(transform.position);
+
+        if (target != null)
+        {
+            Vector3 dis = target.transform.position - transform.position;
+            Quaternion LookRotation = Quaternion.LookRotation(dis);
+
+            targetDir = LookRotation;
+        }
+    }
     private void PlayerShot()
     {
         if (playerInput.playerShot && shotCurTime >= shotWaitTime)
         {
             shotCurTime = 0;
-            Shot();
+
+            if (target == null) Shot();
+            else Shot(targetDir);
         }
     }
-
     private void SetDelta()
     {
         shotCurTime += Time.deltaTime;
+        hitCurTime += Time.deltaTime;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        var bullet = other.GetComponent<Bullet>();
+        if (bullet != null && bullet.type == BulletType.Enemy)
+        {
+            if (hitCurTime >= hitWaitTime)
+            {
+                HP -= bullet.damage;
+                hitCurTime = 0;
+
+                bullet.isHit = true;
+                UIManager.Instance.PlayerHitEffect(hitWaitTime);
+            }
+        }
     }
 }
 

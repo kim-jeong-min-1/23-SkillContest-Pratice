@@ -6,7 +6,7 @@ public class Enemy2 : Enemy
 {
     protected override IEnumerator EnemyAI_Update()
     {
-        yield return StartCoroutine(MoveToPlayerPos(Random.Range(-10, 10), 12, 1.5f));
+        yield return StartCoroutine(MoveToPlayerPos(Random.Range(-10, 10), 15, 3f));
 
         int pCount = 0;
         int Count = 0;
@@ -16,7 +16,7 @@ public class Enemy2 : Enemy
             {
                 Count = 0;
                 pCount++;
-                yield return StartCoroutine(MoveToPlayerPos(Random.Range(-10, 10), 12, 1.5f));
+                yield return StartCoroutine(MoveToPlayerPos(Random.Range(-10, 10), 15, 3f));
             }
 
             Count++;
@@ -50,7 +50,7 @@ public class Enemy2 : Enemy
 
     private IEnumerator Pattern2()
     {
-        StartCoroutine(MoveToPlayerPos(Random.Range(-10, 10), 15, 1.5f));
+        StartCoroutine(MoveToPlayerPos(Random.Range(-10, 10), 17, 3f));
         for (int i = 0; i < 4; i++)
         {
             for (int k = 0; k < 360; k+= 360 / 20)
