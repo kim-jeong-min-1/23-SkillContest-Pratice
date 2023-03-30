@@ -56,7 +56,7 @@ public class BulletSubject : DestroySingleton<BulletSubject>
     {
         foreach (var bullet in bullets)
         {
-            if(bullet.type == BulletType.Enemy)
+            if(bullet.CompareTag("EnemyBullet"))
             {
                 bullet.Reflection();
                 bullet.ChangeType(EntityType.Player);

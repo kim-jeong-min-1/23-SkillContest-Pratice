@@ -5,13 +5,18 @@ using UnityEngine.UI;
 
 public partial class PlayerController : Singleton<PlayerController>
 {
+    [SerializeField] private PlayerStat playerStat;
     private PlayerInput playerInput;
     private PlayerSkillSystem playerSkill;
-    [SerializeField] private PlayerStat playerStat;
 
+    [Space (20f)]
     [SerializeField] private Image playerHpBar;
     [SerializeField] private Image playerFuelBar;
+
+    [Space(20f)]
     [SerializeField] private Transform playerModel;
+    public GameObject playerRayzer;
+    public GameObject playerShield;
     private Transform target;
 
     private float playerMaxHp;
@@ -31,6 +36,8 @@ public partial class PlayerController : Singleton<PlayerController>
     private readonly float playerSkill_2Cool = 15f;
 
     private Quaternion targetDir;
+    public bool isInvis { get; set; } = false;
+    public bool isDie { get; set; } = false;
 
     public float HP
     {
@@ -170,9 +177,10 @@ public partial class PlayerController : Singleton<PlayerController>
 
     private void OnTriggerEnter(Collider other)
     {
-        var bullet = other.GetComponent<Bullet>();
-        if (bullet != null && bullet.type == BulletType.Enemy)
+        if (isInvis) return;
+        if (other.CompareTag("EnemyBullet"))
         {
+            var bullet = other.GetComponent<Bullet>();
             if (hitCurTime >= hitWaitTime)
             {
                 HP -= bullet.damage;

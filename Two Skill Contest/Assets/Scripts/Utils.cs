@@ -6,7 +6,7 @@ public class Utils : MonoBehaviour
 {
     public static Vector2 moveLimit = new Vector2(35f, 20f);
 
-    public static Vector2 spawnLimit = new Vector2(20f, 55f);
+    public static Vector2 spawnLimit = new Vector2(18f, 55f);
 
     public static bool OutCheck(Vector3 pos)
     {

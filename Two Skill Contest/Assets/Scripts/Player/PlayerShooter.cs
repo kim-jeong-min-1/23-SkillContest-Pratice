@@ -66,7 +66,7 @@ public partial class PlayerController
         shooters.Clear();
     }
 
-    private void Shot()
+    public void Shot()
     {
         for (int i = 0; i < shooters.Count; i++)
         {
@@ -74,7 +74,7 @@ public partial class PlayerController
             shooters[i].curFireBullet.ChangeColor(Color.cyan);
         }
     }
-    private void Shot(Quaternion rot)
+    public void Shot(Quaternion rot)
     {
         for (int i = 0; i < shooters.Count; i++)
         {
