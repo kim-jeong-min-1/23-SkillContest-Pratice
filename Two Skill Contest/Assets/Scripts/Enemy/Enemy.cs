@@ -60,7 +60,7 @@ public abstract class Enemy : MonoBehaviour
         float cur = 0;
         float per = 0;
         Vector3 start = transform.position;
-        Vector3 end = player.position + new Vector3(nx, 0, nz) ;
+        Vector3 end = player.position + new Vector3(nx, 0, nz);
 
         while (per < 1)
         {
@@ -68,14 +68,14 @@ public abstract class Enemy : MonoBehaviour
             per = cur / time;
 
             transform.position = Vector3.Lerp(start, end, per);
-            yield return null;  
+            yield return null;
         }
         yield break;
     }
 
     protected Bullet InstantiateBullet(Quaternion rot = default)
     {
-        if(rot == default)
+        if (rot == default)
         {
             enemyShooter.Fire();
         }
@@ -112,9 +112,10 @@ public abstract class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var bullet = other.GetComponent<Bullet>();
-        if (bullet != null && bullet.type == BulletType.Player)
+        if (other.CompareTag("PlayerBullet"))
         {
+            var bullet = other.GetComponent<Bullet>();
+
             GetDamage(bullet.damage);
             bullet.isHit = true;
         }

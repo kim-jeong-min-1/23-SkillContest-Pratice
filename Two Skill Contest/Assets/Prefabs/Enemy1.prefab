@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 2430864370816063139}
   m_Layer: 0
   m_Name: Enemy1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -182,11 +182,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2e33ddf68b7a2445b60cc1ebd611204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprite: {fileID: 2430864371829257180}
   enemyHpBar: {fileID: 2430864372267890654}
+  sprite: {fileID: 2430864371829257180}
   enemySpeed: 0
   enemyHp: 0
-  enemyScore: 0
 --- !u!114 &2430864370816063139
 MonoBehaviour:
   m_ObjectHideFlags: 0

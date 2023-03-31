@@ -8,7 +8,6 @@ public class Bullet : MonoBehaviour
     public float damage { get; set; }
     public bool isHit { get; set; }
     public bool isStop { get; set; }
-    public BulletType type { get; set; }
 
     public void SetBullet(float speed, float damage, Quaternion rot, EntityType type)
     {
@@ -24,11 +23,11 @@ public class Bullet : MonoBehaviour
     {
         if(type == EntityType.Player)
         {
-            this.type = BulletType.Player;
+            this.tag = "PlayerBullet";
         }
         else
         {
-            this.type = BulletType.Enemy;
+            this.tag = "EnemyBullet";
         }
     }
 
@@ -48,11 +47,4 @@ public class Bullet : MonoBehaviour
     {
         transform.Translate(new Vector3(0, 0, speed * Time.deltaTime));
     }
-
-}
-
-public enum BulletType
-{
-    Player,
-    Enemy
 }
