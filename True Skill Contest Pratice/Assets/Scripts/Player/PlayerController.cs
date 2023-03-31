@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,8 +31,8 @@ public partial class PlayerController : Singleton<PlayerController>
     private Quaternion targetDir;
     private Transform target;
 
-    private bool isInvis = false;
-    public bool isDie = false;
+    private bool isInvis { get; set; } = false;
+    public bool isDie { get; set; } = false;
 
     public float Hp
     {
